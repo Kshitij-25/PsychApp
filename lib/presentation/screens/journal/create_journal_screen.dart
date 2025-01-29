@@ -52,6 +52,8 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         actions: [
           TextButton(
             child: Text('Done'),

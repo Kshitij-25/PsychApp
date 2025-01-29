@@ -20,19 +20,12 @@ JournalEntry _$JournalEntryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$JournalEntry {
-  @HiveField(0)
   String? get id => throw _privateConstructorUsedError;
-  @HiveField(1)
   String? get title => throw _privateConstructorUsedError;
-  @HiveField(2)
   DateTime? get createdAt => throw _privateConstructorUsedError;
-  @HiveField(3)
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  @HiveField(4)
   String? get content => throw _privateConstructorUsedError;
-  @HiveField(5)
   bool? get isPinned => throw _privateConstructorUsedError;
-  @HiveField(6)
   String? get subTitle => throw _privateConstructorUsedError;
 
   /// Serializes this JournalEntry to a JSON map.
@@ -52,13 +45,13 @@ abstract class $JournalEntryCopyWith<$Res> {
       _$JournalEntryCopyWithImpl<$Res, JournalEntry>;
   @useResult
   $Res call(
-      {@HiveField(0) String? id,
-      @HiveField(1) String? title,
-      @HiveField(2) DateTime? createdAt,
-      @HiveField(3) DateTime? updatedAt,
-      @HiveField(4) String? content,
-      @HiveField(5) bool? isPinned,
-      @HiveField(6) String? subTitle});
+      {String? id,
+      String? title,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? content,
+      bool? isPinned,
+      String? subTitle});
 }
 
 /// @nodoc
@@ -126,13 +119,13 @@ abstract class _$$JournalEntryImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) String? id,
-      @HiveField(1) String? title,
-      @HiveField(2) DateTime? createdAt,
-      @HiveField(3) DateTime? updatedAt,
-      @HiveField(4) String? content,
-      @HiveField(5) bool? isPinned,
-      @HiveField(6) String? subTitle});
+      {String? id,
+      String? title,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? content,
+      bool? isPinned,
+      String? subTitle});
 }
 
 /// @nodoc
@@ -193,37 +186,30 @@ class __$$JournalEntryImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$JournalEntryImpl implements _JournalEntry {
   _$JournalEntryImpl(
-      {@HiveField(0) this.id,
-      @HiveField(1) this.title,
-      @HiveField(2) this.createdAt,
-      @HiveField(3) this.updatedAt,
-      @HiveField(4) this.content,
-      @HiveField(5) this.isPinned,
-      @HiveField(6) this.subTitle});
+      {this.id,
+      this.title,
+      this.createdAt,
+      this.updatedAt,
+      this.content,
+      this.isPinned,
+      this.subTitle});
 
   factory _$JournalEntryImpl.fromJson(Map<String, dynamic> json) =>
       _$$JournalEntryImplFromJson(json);
 
   @override
-  @HiveField(0)
   final String? id;
   @override
-  @HiveField(1)
   final String? title;
   @override
-  @HiveField(2)
   final DateTime? createdAt;
   @override
-  @HiveField(3)
   final DateTime? updatedAt;
   @override
-  @HiveField(4)
   final String? content;
   @override
-  @HiveField(5)
   final bool? isPinned;
   @override
-  @HiveField(6)
   final String? subTitle;
 
   @override
@@ -272,37 +258,30 @@ class _$JournalEntryImpl implements _JournalEntry {
 
 abstract class _JournalEntry implements JournalEntry {
   factory _JournalEntry(
-      {@HiveField(0) final String? id,
-      @HiveField(1) final String? title,
-      @HiveField(2) final DateTime? createdAt,
-      @HiveField(3) final DateTime? updatedAt,
-      @HiveField(4) final String? content,
-      @HiveField(5) final bool? isPinned,
-      @HiveField(6) final String? subTitle}) = _$JournalEntryImpl;
+      {final String? id,
+      final String? title,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final String? content,
+      final bool? isPinned,
+      final String? subTitle}) = _$JournalEntryImpl;
 
   factory _JournalEntry.fromJson(Map<String, dynamic> json) =
       _$JournalEntryImpl.fromJson;
 
   @override
-  @HiveField(0)
   String? get id;
   @override
-  @HiveField(1)
   String? get title;
   @override
-  @HiveField(2)
   DateTime? get createdAt;
   @override
-  @HiveField(3)
   DateTime? get updatedAt;
   @override
-  @HiveField(4)
   String? get content;
   @override
-  @HiveField(5)
   bool? get isPinned;
   @override
-  @HiveField(6)
   String? get subTitle;
 
   /// Create a copy of JournalEntry

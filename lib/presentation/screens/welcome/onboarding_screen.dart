@@ -53,6 +53,7 @@ class OnboardingScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         elevation: 0,
         actions: [
           if (currentIndex < onboardingData.length - 1)
@@ -120,7 +121,7 @@ class OnboardingScreen extends HookConsumerWidget {
                       width: currentIndex == index ? 24.0 : 8.0,
                       decoration: BoxDecoration(
                         color: currentIndex == index ? Colors.blue : Colors.grey,
-                        borderRadius: BorderRadius.circular(4.0),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),

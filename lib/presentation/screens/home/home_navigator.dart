@@ -11,8 +11,8 @@ import '../../../data/models/psychologist_model.dart';
 import '../../../shared/constants/assets.dart';
 import '../journal/journal_screen.dart';
 import '../profile/profile_screen.dart';
-import '../profile_creation/psychologist_profile_creation.dart';
 import '../search/search_screen.dart';
+import '../search/therapist_search_screen.dart';
 import 'home_screen.dart';
 import 'search_delegate.dart';
 
@@ -51,6 +51,8 @@ class HomeNavigator extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         centerTitle: false,
         title: Text(
           currentIndex.value == 0
@@ -65,19 +67,44 @@ class HomeNavigator extends HookWidget {
         ),
         actions: [
           if (currentIndex.value == 0)
-            Consumer(builder: (context, ref, _) {
-              return IconButton(
-                tooltip: 'Search',
-                onPressed: () {
-                  final psychologistsData = ref.watch(psychologistProvider);
-                  showSearch(
-                    context: context,
-                    delegate: PsychologistSearchDelegate(psychologistsData),
-                  );
-                },
-                icon: Icon(CupertinoIcons.search),
-              );
-            }),
+            Consumer(
+              builder: (context, ref, _) {
+                final psychologistDataAsync = ref.watch(psychologistStreamProvider);
+
+                return psychologistDataAsync.when(
+                  data: (psychologistsData) {
+                    return IconButton(
+                      tooltip: 'Search',
+                      onPressed: () {
+                        showSearch(
+                          context: context,
+                          delegate: PsychologistSearchDelegate(psychologistsData),
+                        );
+                      },
+                      icon: Icon(CupertinoIcons.search),
+                    );
+                  },
+                  loading: () => IconButton(
+                    tooltip: 'Search',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Data is still loading...')),
+                      );
+                    },
+                    icon: Icon(CupertinoIcons.search),
+                  ),
+                  error: (error, stackTrace) => IconButton(
+                    tooltip: 'Search',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error loading data: $error')),
+                      );
+                    },
+                    icon: Icon(CupertinoIcons.search),
+                  ),
+                );
+              },
+            ),
           if (currentIndex.value == 0)
             IconButton(
               tooltip: 'Journals',
@@ -90,7 +117,7 @@ class HomeNavigator extends HookWidget {
             IconButton(
               tooltip: 'Notifications',
               onPressed: () async {
-                context.pushNamed(PsychologistProfileCreation.routeName);
+                // context.pushNamed(PsychologistProfileCreation.routeName);
                 // try {
                 //   final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
                 //   final tz.TZDateTime scheduledTime = now.add(Duration(minutes: 1));

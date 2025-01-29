@@ -21,6 +21,7 @@ class InitialQuestionsScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         forceMaterialTransparency: true,
       ),
       body: SingleChildScrollView(

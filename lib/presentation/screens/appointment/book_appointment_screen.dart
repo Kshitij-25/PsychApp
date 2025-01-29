@@ -65,6 +65,8 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         title: Text(
           'Appointment Schedule',
           textAlign: TextAlign.start,
@@ -87,7 +89,7 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                   color: Theme.of(context).colorScheme.scrim,
                   width: 0.1,
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: TableCalendar(
                 firstDay: DateTime.utc(2020, 1, 1),

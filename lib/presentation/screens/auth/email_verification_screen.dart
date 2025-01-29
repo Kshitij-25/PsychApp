@@ -84,7 +84,10 @@ class EmailVerificationScreen extends HookConsumerWidget {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            forceMaterialTransparency: true,
+          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: SafeArea(

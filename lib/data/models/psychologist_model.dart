@@ -30,6 +30,7 @@ class PsychologistModel with _$PsychologistModel {
     final DateTime? createdAt,
     final DateTime? updatedAt,
     final DateTime? dateOfBirth,
+    final String? uid,
   }) = _PsychologistModel;
 
   factory PsychologistModel.fromJson(Map<String, dynamic> json) => _$PsychologistModelFromJson(json);

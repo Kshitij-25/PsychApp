@@ -18,7 +18,10 @@ class SetPasswordScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isPsychologistMode = ref.watch(psychologistModeProvider);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(

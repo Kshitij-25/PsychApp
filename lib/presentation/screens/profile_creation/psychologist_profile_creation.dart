@@ -347,15 +347,26 @@ class PsychologistProfileCreation extends HookConsumerWidget {
   Widget _buildAvailabilitySection(BuildContext context, WidgetRef ref, PsychologistModel profile) {
     final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    // Persistent TextEditingControllers for both 'from' and 'to' times
     final availabilityControllers = Map<String, Map<String, TextEditingController>>.fromEntries(
       days.map((day) {
-        final availability = profile.availability?[day.toLowerCase()]?.split(' - ') ?? ['', ''];
+        // Safely handle empty or invalid availability strings
+        String fromTime = '';
+        String toTime = '';
+
+        final availabilityStr = profile.availability?[day.toLowerCase()];
+        if (availabilityStr != null && availabilityStr != 'Unavailable') {
+          final times = availabilityStr.split(' - ');
+          if (times.length == 2) {
+            fromTime = times[0];
+            toTime = times[1];
+          }
+        }
+
         return MapEntry(
           day,
           {
-            'from': TextEditingController(text: availability[0]),
-            'to': TextEditingController(text: availability[1]),
+            'from': TextEditingController(text: fromTime),
+            'to': TextEditingController(text: toTime),
           },
         );
       }),
@@ -375,7 +386,7 @@ class PsychologistProfileCreation extends HookConsumerWidget {
     }
 
     String _formatTime(TimeOfDay time) {
-      final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod; // Handle 12-hour clock correctly
+      final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
       final minute = time.minute.toString().padLeft(2, '0');
       final period = time.period == DayPeriod.am ? 'AM' : 'PM';
       return '$hour:$minute $period';
@@ -395,7 +406,6 @@ class PsychologistProfileCreation extends HookConsumerWidget {
         newAvailability[day.toLowerCase()] = '$fromTime - $toTime';
       }
 
-      // Update the state in the provider
       ref.read(psychologistProfileFormProvider.notifier).updateField(
             profile.copyWith(availability: newAvailability),
           );
@@ -426,7 +436,7 @@ class PsychologistProfileCreation extends HookConsumerWidget {
                         final time = await _showTimePicker();
                         if (time != null) {
                           availabilityControllers[day]!['from']!.text = _formatTime(time);
-                          _updateAvailability(day); // Update state after time selection
+                          _updateAvailability(day);
                         }
                       },
                     ),
@@ -446,7 +456,7 @@ class PsychologistProfileCreation extends HookConsumerWidget {
                         final time = await _showTimePicker();
                         if (time != null) {
                           availabilityControllers[day]!['to']!.text = _formatTime(time);
-                          _updateAvailability(day); // Update state after time selection
+                          _updateAvailability(day);
                         }
                       },
                     ),

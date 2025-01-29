@@ -21,6 +21,8 @@ class SupportScreen extends HookConsumerWidget {
     final authNotifier = ref.watch(authStateNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         centerTitle: false,
         title: Text(
           'Support',

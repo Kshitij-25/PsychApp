@@ -20,6 +20,8 @@ class ArticleScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         title: Text(
           articleData.source?.name ?? '',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(

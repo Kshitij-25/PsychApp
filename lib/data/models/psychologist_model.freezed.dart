@@ -44,6 +44,7 @@ mixin _$PsychologistModel {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get dateOfBirth => throw _privateConstructorUsedError;
+  String? get uid => throw _privateConstructorUsedError;
 
   /// Serializes this PsychologistModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -85,7 +86,8 @@ abstract class $PsychologistModelCopyWith<$Res> {
       String? role,
       DateTime? createdAt,
       DateTime? updatedAt,
-      DateTime? dateOfBirth});
+      DateTime? dateOfBirth,
+      String? uid});
 }
 
 /// @nodoc
@@ -127,6 +129,7 @@ class _$PsychologistModelCopyWithImpl<$Res, $Val extends PsychologistModel>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? dateOfBirth = freezed,
+    Object? uid = freezed,
   }) {
     return _then(_value.copyWith(
       fullName: freezed == fullName
@@ -225,6 +228,10 @@ class _$PsychologistModelCopyWithImpl<$Res, $Val extends PsychologistModel>
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -261,7 +268,8 @@ abstract class _$$PsychologistModelImplCopyWith<$Res>
       String? role,
       DateTime? createdAt,
       DateTime? updatedAt,
-      DateTime? dateOfBirth});
+      DateTime? dateOfBirth,
+      String? uid});
 }
 
 /// @nodoc
@@ -301,6 +309,7 @@ class __$$PsychologistModelImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? dateOfBirth = freezed,
+    Object? uid = freezed,
   }) {
     return _then(_$PsychologistModelImpl(
       fullName: freezed == fullName
@@ -399,6 +408,10 @@ class __$$PsychologistModelImplCopyWithImpl<$Res>
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -430,7 +443,8 @@ class _$PsychologistModelImpl implements _PsychologistModel {
       this.role,
       this.createdAt,
       this.updatedAt,
-      this.dateOfBirth})
+      this.dateOfBirth,
+      this.uid})
       : _publications = publications,
         _publicationsLinks = publicationsLinks,
         _availability = availability,
@@ -548,10 +562,12 @@ class _$PsychologistModelImpl implements _PsychologistModel {
   final DateTime? updatedAt;
   @override
   final DateTime? dateOfBirth;
+  @override
+  final String? uid;
 
   @override
   String toString() {
-    return 'PsychologistModel(fullName: $fullName, email: $email, specialization: $specialization, ratings: $ratings, reviews: $reviews, phoneNumber: $phoneNumber, qualification: $qualification, about: $about, publications: $publications, publicationsLinks: $publicationsLinks, avatarData: $avatarData, avatarPath: $avatarPath, avatarUrl: $avatarUrl, availability: $availability, expertise: $expertise, relationships: $relationships, workStudy: $workStudy, happeningsInLife: $happeningsInLife, therapistGender: $therapistGender, sessionTime: $sessionTime, role: $role, createdAt: $createdAt, updatedAt: $updatedAt, dateOfBirth: $dateOfBirth)';
+    return 'PsychologistModel(fullName: $fullName, email: $email, specialization: $specialization, ratings: $ratings, reviews: $reviews, phoneNumber: $phoneNumber, qualification: $qualification, about: $about, publications: $publications, publicationsLinks: $publicationsLinks, avatarData: $avatarData, avatarPath: $avatarPath, avatarUrl: $avatarUrl, availability: $availability, expertise: $expertise, relationships: $relationships, workStudy: $workStudy, happeningsInLife: $happeningsInLife, therapistGender: $therapistGender, sessionTime: $sessionTime, role: $role, createdAt: $createdAt, updatedAt: $updatedAt, dateOfBirth: $dateOfBirth, uid: $uid)';
   }
 
   @override
@@ -601,7 +617,8 @@ class _$PsychologistModelImpl implements _PsychologistModel {
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.dateOfBirth, dateOfBirth) ||
-                other.dateOfBirth == dateOfBirth));
+                other.dateOfBirth == dateOfBirth) &&
+            (identical(other.uid, uid) || other.uid == uid));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -631,7 +648,8 @@ class _$PsychologistModelImpl implements _PsychologistModel {
         role,
         createdAt,
         updatedAt,
-        dateOfBirth
+        dateOfBirth,
+        uid
       ]);
 
   /// Create a copy of PsychologistModel
@@ -676,7 +694,8 @@ abstract class _PsychologistModel implements PsychologistModel {
       final String? role,
       final DateTime? createdAt,
       final DateTime? updatedAt,
-      final DateTime? dateOfBirth}) = _$PsychologistModelImpl;
+      final DateTime? dateOfBirth,
+      final String? uid}) = _$PsychologistModelImpl;
 
   factory _PsychologistModel.fromJson(Map<String, dynamic> json) =
       _$PsychologistModelImpl.fromJson;
@@ -729,6 +748,8 @@ abstract class _PsychologistModel implements PsychologistModel {
   DateTime? get updatedAt;
   @override
   DateTime? get dateOfBirth;
+  @override
+  String? get uid;
 
   /// Create a copy of PsychologistModel
   /// with the given fields replaced by the non-null parameter values.

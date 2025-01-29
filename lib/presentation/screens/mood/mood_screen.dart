@@ -7,7 +7,7 @@ import 'package:psych_app/data/local_data_source/mood_states.dart';
 import 'package:psych_app/presentation/widgets/custom_elevated_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../data/remote_data_source/mood_storage.dart';
+import '../../../services/moods/mood_storage.dart';
 import '../../../shared/constants/assets.dart';
 import '../../../shared/constants/firebase_helper.dart';
 

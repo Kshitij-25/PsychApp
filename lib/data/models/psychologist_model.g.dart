@@ -53,6 +53,7 @@ _$PsychologistModelImpl _$$PsychologistModelImplFromJson(
       dateOfBirth: json['dateOfBirth'] == null
           ? null
           : DateTime.parse(json['dateOfBirth'] as String),
+      uid: json['uid'] as String?,
     );
 
 Map<String, dynamic> _$$PsychologistModelImplToJson(
@@ -82,4 +83,5 @@ Map<String, dynamic> _$$PsychologistModelImplToJson(
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
+      'uid': instance.uid,
     };

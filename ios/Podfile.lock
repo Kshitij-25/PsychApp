@@ -1169,19 +1169,12 @@ PODS:
   - Firebase/Firestore (11.6.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 11.6.0)
-  - Firebase/Storage (11.6.0):
-    - Firebase/CoreOnly
-    - FirebaseStorage (~> 11.6.0)
-  - firebase_auth (5.4.0):
+  - firebase_auth (5.4.1):
     - Firebase/Auth (= 11.6.0)
     - firebase_core
     - Flutter
   - firebase_core (3.10.1):
     - Firebase/CoreOnly (= 11.6.0)
-    - Flutter
-  - firebase_storage (12.4.1):
-    - Firebase/Storage (= 11.6.0)
-    - firebase_core
     - Flutter
   - FirebaseAppCheckInterop (11.7.0)
   - FirebaseAuth (11.6.0):
@@ -1223,13 +1216,6 @@ PODS:
     - leveldb-library (~> 1.22)
     - nanopb (~> 3.30910.0)
   - FirebaseSharedSwift (11.7.0)
-  - FirebaseStorage (11.6.0):
-    - FirebaseAppCheckInterop (~> 11.0)
-    - FirebaseAuthInterop (~> 11.0)
-    - FirebaseCore (~> 11.6.0)
-    - FirebaseCoreExtension (~> 11.6.0)
-    - GoogleUtilities/Environment (~> 8.0)
-    - GTMSessionFetcher/Core (< 5.0, >= 3.4)
   - Flutter (1.0.0)
   - flutter_keyboard_visibility_temp_fork (0.0.1):
     - Flutter
@@ -1394,7 +1380,6 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility_temp_fork (from `.symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -1422,7 +1407,6 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseFirestoreInternal
     - FirebaseSharedSwift
-    - FirebaseStorage
     - GoogleSignIn
     - GoogleUtilities
     - "gRPC-C++"
@@ -1440,8 +1424,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_storage:
-    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility_temp_fork:
@@ -1471,9 +1453,8 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
   cloud_firestore: d1ec4183fa44c06b38ca55d8723abe930468ee0d
   Firebase: 374a441a91ead896215703a674d58cdb3e9d772b
-  firebase_auth: 223c0d5afbd4eba3cd202177ec872436437549ba
+  firebase_auth: 9927cecefe4daaf92b0fbe5d1d283e9329445177
   firebase_core: e2aa06dbd854d961f8ce46c2e20933bee1bf2d2b
-  firebase_storage: 5f8f929f2b1a4f3d37d32ef6b8c474db40bfbe13
   FirebaseAppCheckInterop: 2376d3ec5cb4267facad4fe754ab4f301a5a519b
   FirebaseAuth: 0304982cfe00df8d49bf533bc4becd3de36c7122
   FirebaseAuthInterop: a6973d72aa242ea88ffb6be9c9b06c65455071da
@@ -1483,7 +1464,6 @@ SPEC CHECKSUMS:
   FirebaseFirestore: d5dcc15724f291fe4b415322754bfa01616037fe
   FirebaseFirestoreInternal: db478fdaeb98fe8686ff49e600f3871c224a76ff
   FirebaseSharedSwift: a45efd84d60ebbfdcdbaebc66948af3630459e62
-  FirebaseStorage: 52fb65a69d3e87675186881a08e2a5db86452ace
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_keyboard_visibility_temp_fork: 8a8809c4129e31d25fca77446e0f3fd548122ced
   flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
@@ -1503,7 +1483,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  webview_flutter_wkwebview: 0982481e3d9c78fd5c6f62a002fcd24fc791f1e4
+  webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
 
 PODFILE CHECKSUM: 74c1120cced7f1e46f06663084cae8d25e0d7930
 

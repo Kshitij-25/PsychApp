@@ -63,22 +63,24 @@ class PsychologistsCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.outline,
                       ),
                 ),
-                Row(
-                  spacing: 5,
-                  children: [
-                    Text(
-                      psychologistsData.ratings.toString(),
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
+                psychologistsData.ratings != null
+                    ? Row(
+                        spacing: 5,
+                        children: [
+                          Text(
+                            psychologistsData.ratings != null ? psychologistsData.ratings.toString() : 'NA',
+                            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
                           ),
-                    ),
-                    Icon(
-                      CupertinoIcons.star_fill,
-                      size: 13,
-                      color: Colors.amber,
-                    )
-                  ],
-                ),
+                          Icon(
+                            CupertinoIcons.star_fill,
+                            size: 13,
+                            color: Colors.amber,
+                          )
+                        ],
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
             Spacer(),

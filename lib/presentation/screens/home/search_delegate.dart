@@ -73,7 +73,7 @@ class PsychologistSearchDelegate extends SearchDelegate<String> {
     }
 
     final filteredPsychologists = psychologistsData.where((psychologist) {
-      return psychologist.fullName!.toLowerCase().contains(query.toLowerCase()) ||
+      return (psychologist.fullName != null && psychologist.fullName!.toLowerCase().contains(query.toLowerCase())) ||
           psychologist.specialization!.toLowerCase().contains(
                 query.toLowerCase(),
               );

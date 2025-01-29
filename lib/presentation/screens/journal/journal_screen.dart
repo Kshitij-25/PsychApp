@@ -50,6 +50,8 @@ class JournalScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         centerTitle: false,
         title: Text(
           'Journal',

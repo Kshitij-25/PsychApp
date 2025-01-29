@@ -9,6 +9,7 @@ import '../../presentation/screens/article/article_screen.dart';
 import '../../presentation/screens/auth/email_verification_screen.dart';
 import '../../presentation/screens/auth/forgot_password_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
+import '../../presentation/screens/chat/chat_screen.dart';
 import '../../presentation/screens/chat/inbox_screen.dart';
 import '../../presentation/screens/home/home_navigator.dart';
 import '../../presentation/screens/home/psychologist_home_nav.dart';
@@ -30,26 +31,18 @@ import '../constants/firebase_helper.dart';
 class AppRouter {
   AppRouter._();
 
-  // static Future<String> getUserRole(String uid) async {
-  //   DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  //   if (userDoc.exists) {
-  //     return userDoc['role']; // 'admin', 'user', etc.
-  //   }
-  //   return 'user'; // Default role
-  // }
-
   static Future<String?> checkUserRole() async {
     User? user = FirebaseHelper.currentUser;
 
     if (user != null) {
       String userRole = await FirebaseHelper.getUserRole(user.uid);
       if (userRole == 'user') {
-        return HomeNavigator.routeName; // Return the correct route for a user
+        return HomeNavigator.routeName;
       } else {
-        return PsychologistHomeNav.routeName; // Return the correct route for a psychologist
+        return PsychologistHomeNav.routeName;
       }
     }
-    return SplashScreen.routeName; // Return null if the user is not logged in
+    return SplashScreen.routeName;
   }
 
   static late GoRouter router;
@@ -98,41 +91,20 @@ class AppRouter {
           name: EmailVerificationScreen.routeName,
           path: EmailVerificationScreen.routeName,
           builder: (context, state) => const EmailVerificationScreen(),
-          routes: [
-            // GoRoute(
-            //   name: OtpScreen.routeName,
-            //   path: OtpScreen.routeName,
-            //   builder: (context, state) => OtpScreen(
-            //     isResetPassword: state.extra is bool ? state.extra as bool : false,
-            //   ),
-            //   routes: [],
-            // ),
-            // GoRoute(
-            //   name: SetPasswordScreen.routeName,
-            //   path: SetPasswordScreen.routeName,
-            //   builder: (context, state) => SetPasswordScreen(
-            //     isResetPassword: state.extra is bool ? state.extra as bool : false,
-            //   ),
-            //   routes: [],
-            // ),
-          ],
+          routes: [],
         ),
       ],
     ),
     GoRoute(
       name: ProfileCreationQuestions.routeName,
       path: ProfileCreationQuestions.routeName,
-      builder: (context, state) => ProfileCreationQuestions(
-          // isResetPassword: state.extra is bool ? state.extra as bool : false,
-          ),
+      builder: (context, state) => ProfileCreationQuestions(),
       routes: [],
     ),
     GoRoute(
       name: PsychologistProfileCreation.routeName,
       path: PsychologistProfileCreation.routeName,
-      builder: (context, state) => PsychologistProfileCreation(
-          // isResetPassword: state.extra is bool ? state.extra as bool : false,
-          ),
+      builder: (context, state) => PsychologistProfileCreation(),
       routes: [],
     ),
     GoRoute(
@@ -224,6 +196,28 @@ class AppRouter {
           routes: [],
         ),
       ],
+    ),
+    GoRoute(
+      name: ChatScreen.routeName,
+      path: ChatScreen.routeName,
+      builder: (context, state) {
+        final extras = state.extra! as Map<String, dynamic>;
+        final psychologistId = extras['psychologistId'] ?? '';
+        final psychologistName = extras['psychologistName'] ?? '';
+        final psychologistAvatar = extras['psychologistAvatar'] ?? '';
+        final userAvatar = extras['userAvatar'] ?? '';
+        final chatRoomId = extras['chatRoomId'] ?? '';
+        final userId = extras['userId'] ?? '';
+        return ChatScreen(
+          psychologistId: psychologistId,
+          psychologistName: psychologistName,
+          psychologistAvatar: psychologistAvatar,
+          userId: userId,
+          chatRoomId: chatRoomId,
+          userAvatar: userAvatar,
+        );
+      },
+      routes: [],
     ),
   ];
 }

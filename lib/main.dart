@@ -6,14 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:psych_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
-import 'data/models/journal_entry.dart';
 import 'services/notifications/local_notification_service.dart';
 import 'shared/routers/app_router.dart';
 
@@ -34,8 +31,9 @@ void main() async {
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    sslEnabled: true,
+    host: 'firestore.googleapis.com',
   );
-
   // Add error handling for Flutter errors
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
@@ -44,13 +42,6 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await dotenv.load();
-
-  // Initialize Hive
-  final appDocumentDir = await getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDir.path);
-
-  // Register the adapter
-  Hive.registerAdapter(JournalEntryAdapter());
 
   final prefs = await SharedPreferences.getInstance();
 

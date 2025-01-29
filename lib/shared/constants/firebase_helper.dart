@@ -13,7 +13,7 @@ class FirebaseHelper {
 
   // Determine which collection to use based on the user role
   static String getUserCollection(String role) {
-    return role == 'psychologist' ? 'psychologists' : 'users';
+    return role == 'psychologist' ? 'psychologist' : 'users';
   }
 
   // Fetch user document from users or psychologists collection

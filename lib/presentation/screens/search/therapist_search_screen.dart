@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,72 +6,85 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/local_data_source/psychologists_type.dart';
 import '../../../data/models/psychologist_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
-import '../home/home_navigator.dart';
 import '../profile/therapist_profile_screen.dart';
 import 'widgets/psychologists_card.dart';
 
 final selectedFilterProvider = StateProvider<String>((ref) => "recommended");
+
+final psychologistStreamProvider = StreamProvider<List<PsychologistModel>>((ref) {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    throw Exception('User not authenticated');
+  }
+
+  return FirebaseHelper.streamDocuments('psychologist').map((snapshot) {
+    return snapshot.docs.map((doc) => PsychologistModel.fromJson(doc.data() as Map<String, dynamic>)).toList();
+  });
+});
 
 class TherapistSearchScreen extends HookConsumerWidget {
   const TherapistSearchScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final psychologistsData = ref.watch(psychologistProvider);
     final selectedFilter = ref.watch(selectedFilterProvider);
 
     return Column(
       children: [
         _buildFilterBar(context, ref),
         SizedBox(height: 10),
-        StreamBuilder<QuerySnapshot>(
-          stream: FirebaseHelper.streamDocuments('psychologist'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+        ref.watch(psychologistStreamProvider).when(
+              data: (psychologistsData) {
+                // Helper function to normalize strings for comparison
+                String normalizeString(String input) {
+                  return input
+                      .toLowerCase()
+                      .replaceAll('-', '_') // Convert hyphens to underscores
+                      .replaceAll(' ', '_'); // Convert spaces to underscores
+                }
 
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            }
+                // In your filter logic
+                final filteredData = psychologistsData.where((psychologist) {
+                  if (selectedFilter == "recommended") return true;
 
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Center(child: Text('No psychologists found'));
-            }
+                  final userInput = normalizeString(selectedFilter);
+                  final specialization = psychologist.specialization;
 
-            // Convert snapshot to a list of documents
-            final psychologistsData = snapshot.data!.docs.map((doc) {
-              // return doc.data() as Map<String, dynamic>;
-              return PsychologistModel.fromJson(doc.data() as Map<String, dynamic>);
-            }).toList();
+                  if (specialization != null) {
+                    final specializationList = specialization is List<dynamic> ? specialization : [specialization];
+                    return (specializationList as List<dynamic>).map((e) => normalizeString(e.toString())).contains(userInput);
+                  }
+                  return false;
+                }).toList();
 
-            // Filter data based on selectedFilter
-            final filteredData = psychologistsData.where((psychologist) {
-              if (selectedFilter == "recommended") return true;
-              if ((psychologist.specialization as List<dynamic>).contains(selectedFilter)) {
-                return true;
-              }
-              return false;
-            }).toList();
-
-            return Expanded(
-              child: ListView.builder(
-                itemCount: filteredData.length,
-                itemBuilder: (context, index) {
-                  return PsychologistsCard(
-                    psychologistsData: filteredData[index],
-                    onTap: () {
-                      context.pushNamed(
-                        TherapistProfileScreen.routeName,
-                        extra: filteredData[index],
-                      );
-                    },
-                  );
-                },
+                return Expanded(
+                  child: filteredData.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: filteredData.length,
+                          itemBuilder: (context, index) {
+                            return PsychologistsCard(
+                              psychologistsData: filteredData[index],
+                              onTap: () {
+                                context.pushNamed(
+                                  TherapistProfileScreen.routeName,
+                                  extra: filteredData[index],
+                                );
+                              },
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text('No psychologists found'),
+                        ),
+                );
+              },
+              loading: () => Center(
+                child: CircularProgressIndicator(),
               ),
-            );
-          },
-        ),
+              error: (error, stackTrace) => Center(
+                child: Text('Error: ${error.toString()}'),
+              ),
+            ),
       ],
     );
   }

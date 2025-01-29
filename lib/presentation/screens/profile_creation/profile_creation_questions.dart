@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../shared/constants/firebase_helper.dart';
-import '../../notifiers/user_profile_creation_notifier.dart';
+import '../../notifiers/profile_creation_notifier.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../home/home_navigator.dart';
 
