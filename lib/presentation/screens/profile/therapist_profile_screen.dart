@@ -10,6 +10,7 @@ import 'package:psych_app/presentation/widgets/custom_elevated_button.dart';
 
 import '../../../data/models/psychologist_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
+import '../../notifiers/chat_notifier.dart';
 import '../appointment/book_appointment_screen.dart';
 import '../chat/chat_screen.dart';
 
@@ -36,6 +37,8 @@ class TherapistProfileScreen extends HookConsumerWidget {
         avatarBytes = Uint8List.fromList(List<int>.from(psychologistsData.avatarData as List<dynamic>));
       }
     }
+
+    final chatNotifier = ref.read(chatProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -248,20 +251,39 @@ class TherapistProfileScreen extends HookConsumerWidget {
                     ),
                     SizedBox(width: 16),
                     IconButton.filled(
-                      onPressed: () {
-                        List<String> ids = [FirebaseHelper.currentUserId!, psychologistsData.uid!];
-                        ids.sort(); // Ensure consistent ordering
-                        String chatRoomId = ids.join('_');
-                        context.pushNamed(
-                          ChatScreen.routeName,
-                          extra: {
-                            'psychologistAvatar': psychologistsData.avatarData,
-                            'psychologistId': psychologistsData.uid,
-                            'psychologistName': psychologistsData.fullName,
-                            'userId': FirebaseHelper.currentUserId,
-                            'chatRoomId': chatRoomId,
-                          },
-                        );
+                      onPressed: () async {
+                        try {
+                          final chatNotifier = ref.read(chatProvider.notifier);
+                          List<String> ids = [FirebaseHelper.currentUserId!, psychologistsData.uid!];
+                          ids.sort();
+                          String chatRoomId = ids.join('_');
+
+                          // Check if already exists without triggering permission error
+                          final roomSnapshot = await FirebaseHelper.getDocument('chatRooms', chatRoomId);
+
+                          if (roomSnapshot?.exists == false) {
+                            // Create if not exists
+                            await chatNotifier.getOrCreateChatRoom(
+                              psychologistId: psychologistsData.uid!,
+                              userId: FirebaseHelper.currentUserId!,
+                            );
+                          }
+
+                          context.pushNamed(
+                            ChatScreen.routeName,
+                            extra: {
+                              'psychologistAvatar': psychologistsData.avatarData,
+                              'psychologistId': psychologistsData.uid,
+                              'psychologistName': psychologistsData.fullName,
+                              'userId': FirebaseHelper.currentUserId,
+                              'chatRoomId': chatRoomId,
+                            },
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error starting chat: $e')),
+                          );
+                        }
                       },
                       icon: Icon(
                         CupertinoIcons.chat_bubble_text_fill,

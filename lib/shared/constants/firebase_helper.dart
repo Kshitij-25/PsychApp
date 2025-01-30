@@ -74,7 +74,7 @@ class FirebaseHelper {
   // Get document by ID from a specific collection
   static Future<DocumentSnapshot?> getDocument(String collection, String docId) async {
     try {
-      return await _firestore.collection(collection).doc(docId).get();
+      return await _firestore.collection(collection).doc(docId).get(const GetOptions(source: Source.cache));
     } catch (e) {
       print('Error fetching document from $collection: $e');
       return null;

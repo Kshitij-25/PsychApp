@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatMessage {
   String? messageId;
   String? senderId;
-  String? receiverId;
+  // String? receiverId;
   String? message;
   DateTime? timestamp;
 
   ChatMessage({
     this.messageId,
     this.senderId,
-    this.receiverId,
+    // this.receiverId,
     this.message,
     this.timestamp,
   });
@@ -18,7 +18,7 @@ class ChatMessage {
   ChatMessage.fromJson(Map<String, dynamic> json) {
     messageId = json['messageId'];
     senderId = json['senderId'];
-    receiverId = json['receiverId'];
+    // // receiverId = json['receiverId'];
     message = json['message'];
     timestamp = (json['timestamp'] as Timestamp).toDate();
   }
@@ -27,7 +27,7 @@ class ChatMessage {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['messageId'] = this.messageId;
     data['senderId'] = this.senderId;
-    data['receiverId'] = this.receiverId;
+    // data['receiverId'] = this.receiverId;
     data['message'] = this.message;
     data['timestamp'] = Timestamp.fromDate(timestamp!);
     return data;

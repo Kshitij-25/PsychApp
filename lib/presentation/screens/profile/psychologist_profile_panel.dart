@@ -79,7 +79,9 @@ class PsychologistProfilePanel extends HookConsumerWidget {
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            psychologist.specialization ?? 'N/A',
+                            (psychologist.specialization != null && psychologist.specialization!.isNotEmpty)
+                                ? psychologist.specialization![0].toUpperCase() + psychologist.specialization!.substring(1)
+                                : 'N/A',
                             textAlign: TextAlign.start,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),

@@ -70,7 +70,7 @@ class InboxScreen extends HookConsumerWidget {
               ),
               SizedBox(height: 15),
               Expanded(
-                child: ref.watch(userChatRoomsProvider(FirebaseHelper.currentUserId!)).when(
+                child: ref.watch(chatRoomsProvider).when(
                       data: (rooms) {
                         // Filter chat rooms based on the search query
                         final filteredRooms = searchQuery.value.isEmpty

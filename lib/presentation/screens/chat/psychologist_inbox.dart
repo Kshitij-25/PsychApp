@@ -16,7 +16,7 @@ class PsychologistInbox extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: ref.watch(psychologistChatRoomsProvider(FirebaseHelper.currentUserId ?? '')).when(
+      child: ref.watch(chatRoomsProvider).when(
             data: (rooms) {
               final psychologistRooms = rooms.where((room) {
                 final currentUserId = FirebaseHelper.currentUserId;
