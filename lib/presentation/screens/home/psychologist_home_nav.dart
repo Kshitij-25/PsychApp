@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../notifiers/auth_notifier.dart';
 import '../chat/psychologist_inbox.dart';
+import '../community/community_home.dart';
+import '../community/community_post_screen.dart';
 import '../profile/psychologist_profile_panel.dart';
 import '../welcome/landing_screen.dart';
 
@@ -15,7 +18,7 @@ class PsychologistHomeNav extends HookConsumerWidget {
   const PsychologistHomeNav({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentIndex = useState(1);
+    final currentIndex = useState(0);
     final _pageController = usePageController(initialPage: currentIndex.value);
 
     final authNotifier = ref.watch(authStateNotifierProvider.notifier);
@@ -27,21 +30,29 @@ class PsychologistHomeNav extends HookConsumerWidget {
         centerTitle: false,
         title: currentIndex.value == 0
             ? Text(
-                'User Chats',
+                'Feeds',
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               )
-            : Text(
-                'Profile',
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
+            : currentIndex.value == 1
+                ? Text(
+                    'User Chats',
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  )
+                : Text(
+                    'Profile',
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
         actions: [
-          if (currentIndex.value == 1)
+          if (currentIndex.value == 2)
             TextButton(
               onPressed: () => _handleLogout(context, ref, authNotifier),
               child: Text('Logout'),
@@ -55,11 +66,20 @@ class PsychologistHomeNav extends HookConsumerWidget {
         },
         physics: const NeverScrollableScrollPhysics(),
         children: [
+          CommunityHome(),
           PsychologistInbox(),
           PsychologistProfilePanel(),
         ],
       ),
       bottomNavigationBar: _buildBottomNavBar(context, currentIndex, _pageController),
+      floatingActionButton: currentIndex.value == 0
+          ? FloatingActionButton(
+              child: Icon(CupertinoIcons.plus),
+              onPressed: () {
+                context.pushNamed(CommunityPostScreen.routeName);
+              },
+            )
+          : null,
     );
   }
 
@@ -84,6 +104,10 @@ class PsychologistHomeNav extends HookConsumerWidget {
         currentIndex.value = index;
       },
       items: [
+        BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.newspaper),
+          label: 'Feeds',
+        ),
         BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.chat_bubble_text_fill),
           label: 'Chats',

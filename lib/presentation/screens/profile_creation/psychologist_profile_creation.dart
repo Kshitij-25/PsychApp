@@ -61,7 +61,7 @@ class PsychologistProfileCreation extends HookConsumerWidget {
                             source: ImageSource.gallery,
                             maxWidth: 512,
                             maxHeight: 512,
-                            imageQuality: 70,
+                            imageQuality: 90,
                           );
                           if (image != null) {
                             therapistProfileProvider.updateField(formState.copyWith(avatarPath: image.path));

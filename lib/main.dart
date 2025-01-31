@@ -49,7 +49,7 @@ void main() async {
 
   // Initialize notification service
   await LocalNotificationService.initialize();
-  await LocalNotificationService().requestPermission();
+  // await LocalNotificationService().requestPermission();
 
   if (kDebugMode) {
     prefs.clear();

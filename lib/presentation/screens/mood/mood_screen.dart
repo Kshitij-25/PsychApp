@@ -31,71 +31,73 @@ class MoodScreen extends HookConsumerWidget {
       return null;
     }, []);
 
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerLowest,
-            border: Border.all(
-              color: Theme.of(context).colorScheme.scrim,
-              width: 0.1,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: TableCalendar(
-            firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.utc(2030, 12, 31),
-            focusedDay: DateTime.now(),
-            calendarStyle: CalendarStyle(
-              outsideDaysVisible: true,
-              todayDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.outline,
-                shape: BoxShape.circle,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerLowest,
+              border: Border.all(
+                color: Theme.of(context).colorScheme.scrim,
+                width: 0.1,
               ),
+              borderRadius: BorderRadius.circular(12),
             ),
-            headerStyle: HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-            ),
-            rowHeight: 100,
-            calendarFormat: CalendarFormat.month,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarBuilders: CalendarBuilders(
-              markerBuilder: (context, day, events) {
-                final mood = moods.value[day];
-                if (mood != null) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Lottie.asset(
-                        mood == 'happy'
-                            ? Assets.happy
-                            : mood == 'neutral'
-                                ? Assets.neutral
-                                : Assets.sad,
-                        height: 30,
-                        width: 30,
+            child: TableCalendar(
+              firstDay: DateTime.utc(2020, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
+              focusedDay: DateTime.now(),
+              calendarStyle: CalendarStyle(
+                outsideDaysVisible: true,
+                todayDecoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.outline,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+              ),
+              rowHeight: 100,
+              calendarFormat: CalendarFormat.month,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarBuilders: CalendarBuilders(
+                markerBuilder: (context, day, events) {
+                  final mood = moods.value[day];
+                  if (mood != null) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Lottie.asset(
+                          mood == 'happy'
+                              ? Assets.happy
+                              : mood == 'neutral'
+                                  ? Assets.neutral
+                                  : Assets.sad,
+                          height: 30,
+                          width: 30,
+                        ),
                       ),
-                    ),
-                  );
-                }
-                return null;
+                    );
+                  }
+                  return null;
+                },
+              ),
+              onDaySelected: (selectedDay, focusedDay) {
+                _showMoodSelectionSheet(
+                  context,
+                  selectedDay,
+                  moods,
+                  ref,
+                  selectedMood,
+                );
               },
             ),
-            onDaySelected: (selectedDay, focusedDay) {
-              _showMoodSelectionSheet(
-                context,
-                selectedDay,
-                moods,
-                ref,
-                selectedMood,
-              );
-            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

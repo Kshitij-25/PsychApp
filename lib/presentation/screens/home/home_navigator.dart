@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/models/psychologist_model.dart';
 import '../../../shared/constants/assets.dart';
 import '../journal/journal_screen.dart';
+import '../community/community_home.dart';
 import '../profile/profile_screen.dart';
 import '../search/search_screen.dart';
 import '../search/therapist_search_screen.dart';
@@ -44,9 +46,10 @@ final psychologistProvider = StateNotifierProvider<PsychologistNotifier, List<Ps
 class HomeNavigator extends HookWidget {
   static const routeName = '/homeNavigator';
   const HomeNavigator({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final currentIndex = useState(1);
+    final currentIndex = useState(0);
     final _pageController = usePageController(initialPage: currentIndex.value);
 
     return Scaffold(
@@ -56,17 +59,19 @@ class HomeNavigator extends HookWidget {
         centerTitle: false,
         title: Text(
           currentIndex.value == 0
-              ? 'Search'
+              ? 'Home'
               : currentIndex.value == 1
-                  ? 'Home'
-                  : 'Profile',
+                  ? 'Search'
+                  : currentIndex.value == 2
+                      ? 'Feeds'
+                      : 'Profile',
           textAlign: TextAlign.start,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
         actions: [
-          if (currentIndex.value == 0)
+          if (currentIndex.value == 1)
             Consumer(
               builder: (context, ref, _) {
                 final psychologistDataAsync = ref.watch(psychologistStreamProvider);
@@ -105,7 +110,7 @@ class HomeNavigator extends HookWidget {
                 );
               },
             ),
-          if (currentIndex.value == 0)
+          if (currentIndex.value != 3)
             IconButton(
               tooltip: 'Journals',
               onPressed: () {
@@ -143,8 +148,9 @@ class HomeNavigator extends HookWidget {
         },
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          SearchScreen(),
           HomeScreen(),
+          SearchScreen(),
+          CommunityHome(),
           ProfileScreen(),
         ],
       ),
@@ -174,12 +180,16 @@ class HomeNavigator extends HookWidget {
       },
       items: [
         BottomNavigationBarItem(
+          icon: Icon(CupertinoIcons.house_fill),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.search),
           label: 'Search',
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.house_fill),
-          label: 'Home',
+          icon: Icon(FontAwesomeIcons.newspaper),
+          label: 'Feed',
         ),
         BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.person_fill),

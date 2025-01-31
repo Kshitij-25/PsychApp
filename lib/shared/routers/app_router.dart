@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/models/articles.dart';
@@ -11,6 +12,8 @@ import '../../presentation/screens/auth/forgot_password_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/chat/chat_screen.dart';
 import '../../presentation/screens/chat/inbox_screen.dart';
+import '../../presentation/screens/community/community_post_screen.dart';
+import '../../presentation/screens/community/post_screen.dart';
 import '../../presentation/screens/home/home_navigator.dart';
 import '../../presentation/screens/home/psychologist_home_nav.dart';
 import '../../presentation/screens/journal/create_journal_screen.dart';
@@ -124,7 +127,49 @@ class AppRouter {
       name: PsychologistHomeNav.routeName,
       path: PsychologistHomeNav.routeName,
       builder: (context, state) => PsychologistHomeNav(),
-      routes: [],
+      routes: [
+        // GoRoute(
+        //   name: CommunityPostScreen.routeName,
+        //   path: CommunityPostScreen.routeName,
+        //   builder: (context, state) => CommunityPostScreen(),
+        //   routes: [],
+        // ),
+        GoRoute(
+          name: CommunityPostScreen.routeName,
+          path: CommunityPostScreen.routeName,
+          pageBuilder: (context, state) {
+            // final extras = state.extra as Map<String, dynamic>?; // Allow for null extras
+            // final isQuotingBrief = extras?['isQuotingBrief'] as bool? ?? false; // Default to false if null
+
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: CommunityPostScreen(),
+              transitionDuration: const Duration(milliseconds: 200),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                const begin = Offset(0.0, 1.0);
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
+
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+
+                return SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                );
+              },
+            );
+          },
+        ),
+        GoRoute(
+          name: PostScreen.routeName,
+          path: PostScreen.routeName,
+          builder: (context, state) => PostScreen(
+            postId: state.extra as String,
+          ),
+          routes: [],
+        ),
+      ],
     ),
     GoRoute(
       name: HomeNavigator.routeName,

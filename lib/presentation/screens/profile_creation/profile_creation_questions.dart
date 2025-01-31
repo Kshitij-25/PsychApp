@@ -58,7 +58,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                             source: ImageSource.gallery,
                             maxWidth: 512,
                             maxHeight: 512,
-                            imageQuality: 70,
+                            imageQuality: 90,
                           );
                           if (image != null) {
                             profileForm.updateField('avatarPath', image.path);

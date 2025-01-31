@@ -27,11 +27,19 @@ final chatRoomsProvider = StreamProvider<List<ChatRoom>>((ref) {
       .where('participants', arrayContains: user.uid)
       .orderBy('lastMessageTimestamp', descending: true)
       .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) => ChatRoom.fromJson(doc.data())).toList());
+      .handleError((e) => print('Chat rooms error: $e'))
+      .map((snapshot) => snapshot.docs
+          .map((doc) => ChatRoom.fromJson({
+                ...doc.data(),
+                'id': doc.id, // Ensure chatRoomId is included
+              }))
+          .toList());
 });
 
 class ChatNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> {
   ChatNotifier() : super(const AsyncValue.loading());
+
+  final _firestore = FirebaseFirestore.instance;
 
   Future<String> getOrCreateChatRoom({
     required String psychologistId,
@@ -44,7 +52,7 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> {
     }
     final chatRoomId = participants.join('_');
 
-    final chatRoomRef = FirebaseFirestore.instance.collection('chatRooms').doc(chatRoomId);
+    final chatRoomRef = _firestore.collection('chatRooms').doc(chatRoomId);
 
     try {
       final currentUser = FirebaseAuth.instance.currentUser!;
@@ -52,11 +60,11 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> {
         throw Exception('User not authorized to create this chat');
       }
 
-      final batch = FirebaseFirestore.instance.batch();
+      final batch = _firestore.batch();
 
-      final psychologistDoc = await FirebaseFirestore.instance.collection('psychologist').doc(psychologistId).get();
+      final psychologistDoc = await _firestore.collection('psychologist').doc(psychologistId).get();
 
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      final userDoc = await _firestore.collection('users').doc(userId).get();
 
       batch.set(chatRoomRef, {
         "chatRoomId": chatRoomId,
@@ -106,15 +114,15 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> {
         );
       }
 
-      await FirebaseFirestore.instance.collection('chatRooms/$chatRoomId/messages').add({
+      await _firestore.collection('chatRooms/$chatRoomId/messages').add({
         "senderId": user.uid,
         "message": message,
         "timestamp": Timestamp.now(),
       });
 
-      await FirebaseFirestore.instance.collection('chatRooms').doc(chatRoomId).update({
+      await _firestore.collection('chatRooms').doc(chatRoomId).update({
         'lastMessage': message,
-        'lastMessageDate': Timestamp.now(),
+        'lastMessageTimestamp': Timestamp.now(),
       });
     } catch (e) {
       print('Error sending message: $e');

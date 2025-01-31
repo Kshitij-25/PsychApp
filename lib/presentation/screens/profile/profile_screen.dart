@@ -120,87 +120,95 @@ class ProfileScreen extends HookConsumerWidget {
             },
           ),
           SizedBox(height: 32),
-          ListTile(
-            onTap: () => context.pushNamed(InboxScreen.routeName),
-            leading: Icon(CupertinoIcons.chat_bubble_fill),
-            title: Text('Chats'),
-            trailing: Icon(CupertinoIcons.chevron_forward),
-          ),
-          Divider(thickness: 0.5),
-          ListTile(
-            onTap: () => context.pushNamed(MoodNavigator.routeName),
-            leading: Icon(CupertinoIcons.smiley_fill),
-            title: Text('Moods & Insights'),
-            trailing: Icon(CupertinoIcons.chevron_forward),
-          ),
-          Divider(thickness: 0.5),
-          ListTile(
-            leading: Icon(CupertinoIcons.heart_fill),
-            title: Text('Favourites'),
-            trailing: Icon(CupertinoIcons.chevron_forward),
-          ),
-          Divider(thickness: 0.5),
-          ListTile(
-            onTap: () => context.pushNamed(NotificationScreen.routeName),
-            leading: Icon(CupertinoIcons.bell_fill),
-            title: Text('Notifications'),
-            trailing: Icon(CupertinoIcons.chevron_forward),
-          ),
-          Divider(thickness: 0.5),
-          ListTile(
-            onTap: () => context.pushNamed(SupportScreen.routeName),
-            leading: Icon(CupertinoIcons.gear_solid),
-            title: Text('Support'),
-            trailing: Icon(CupertinoIcons.chevron_forward),
-          ),
-          Divider(thickness: 0.5),
-          ListTile(
-            leading: RotatedBox(
-              quarterTurns: -1,
-              child: Icon(
-                CupertinoIcons.share,
-                color: Theme.of(context).colorScheme.error,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () => context.pushNamed(InboxScreen.routeName),
+                    leading: Icon(CupertinoIcons.chat_bubble_fill),
+                    title: Text('Chats'),
+                    trailing: Icon(CupertinoIcons.chevron_forward),
+                  ),
+                  Divider(thickness: 0.5),
+                  ListTile(
+                    onTap: () => context.pushNamed(MoodNavigator.routeName),
+                    leading: Icon(CupertinoIcons.smiley_fill),
+                    title: Text('Moods & Insights'),
+                    trailing: Icon(CupertinoIcons.chevron_forward),
+                  ),
+                  Divider(thickness: 0.5),
+                  ListTile(
+                    leading: Icon(CupertinoIcons.heart_fill),
+                    title: Text('Favourites'),
+                    trailing: Icon(CupertinoIcons.chevron_forward),
+                  ),
+                  Divider(thickness: 0.5),
+                  ListTile(
+                    onTap: () => context.pushNamed(NotificationScreen.routeName),
+                    leading: Icon(CupertinoIcons.bell_fill),
+                    title: Text('Notifications'),
+                    trailing: Icon(CupertinoIcons.chevron_forward),
+                  ),
+                  Divider(thickness: 0.5),
+                  ListTile(
+                    onTap: () => context.pushNamed(SupportScreen.routeName),
+                    leading: Icon(CupertinoIcons.gear_solid),
+                    title: Text('Support'),
+                    trailing: Icon(CupertinoIcons.chevron_forward),
+                  ),
+                  Divider(thickness: 0.5),
+                  ListTile(
+                    leading: RotatedBox(
+                      quarterTurns: -1,
+                      child: Icon(
+                        CupertinoIcons.share,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                    title: Text('Sign out'),
+                    trailing: Icon(CupertinoIcons.chevron_forward),
+                    onTap: () async {
+                      // Show confirmation dialog before signing out
+                      final shouldSignOut = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog.adaptive(
+                          title: Text('Sign Out'),
+                          content: Text('Are you sure you want to sign out?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => context.pop(false),
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => context.pop(true),
+                              child: Text('Sign Out'),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (shouldSignOut == true) {
+                        // Sign out and wait for the user state to update
+                        await authNotifier.signOut();
+
+                        ref.invalidate(authStateNotifierProvider);
+
+                        // Redirect to the landing screen only after user is null
+                        ref.listenManual(
+                          authStateNotifierProvider,
+                          (previous, next) {
+                            if (next.user == null) {
+                              context.pushReplacementNamed(LandingScreen.routeName);
+                            }
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
-            title: Text('Sign out'),
-            trailing: Icon(CupertinoIcons.chevron_forward),
-            onTap: () async {
-              // Show confirmation dialog before signing out
-              final shouldSignOut = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog.adaptive(
-                  title: Text('Sign Out'),
-                  content: Text('Are you sure you want to sign out?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => context.pop(false),
-                      child: Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => context.pop(true),
-                      child: Text('Sign Out'),
-                    ),
-                  ],
-                ),
-              );
-
-              if (shouldSignOut == true) {
-                // Sign out and wait for the user state to update
-                await authNotifier.signOut();
-
-                ref.invalidate(authStateNotifierProvider);
-
-                // Redirect to the landing screen only after user is null
-                ref.listenManual(
-                  authStateNotifierProvider,
-                  (previous, next) {
-                    if (next.user == null) {
-                      context.pushReplacementNamed(LandingScreen.routeName);
-                    }
-                  },
-                );
-              }
-            },
           ),
         ],
       ),

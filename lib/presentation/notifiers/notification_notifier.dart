@@ -105,3 +105,36 @@ class NotificationSettingsNotifier extends StateNotifier<NotificationSettings> {
     }
   }
 }
+
+// import 'package:flutter/material.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// import '../../data/models/notification_model.dart';
+
+// class NotificationSettingsNotifier extends StateNotifier<NotificationModel> {
+//   NotificationSettingsNotifier() : super(const NotificationModel());
+
+//   void toggleNotifications(bool value) {
+//     state = state.copyWith(areNotificationsEnabled: value);
+//   }
+
+//   void toggleMoodLogNotifications(bool value) {
+//     state = state.copyWith(moodLogNotifications: value);
+//   }
+
+//   void toggleJournalEntryNotifications(bool value) {
+//     state = state.copyWith(journalEntryNotifications: value);
+//   }
+
+//   void toggleChatNotifications(bool value) {
+//     state = state.copyWith(chatNotifications: value);
+//   }
+
+//   void updateNotificationTime(TimeOfDay newTime) {
+//     state = state.copyWith(notificationTime: newTime);
+//   }
+// }
+
+// final notificationSettingsProvider = StateNotifierProvider<NotificationSettingsNotifier, NotificationModel>(
+//   (ref) => NotificationSettingsNotifier(),
+// );

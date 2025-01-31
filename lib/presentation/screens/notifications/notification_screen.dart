@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../notifiers/notification_notifier.dart';
 
-// Notification Settings Page
-class NotificationScreen extends HookConsumerWidget {
+class NotificationScreen extends ConsumerWidget {
   static const routeName = '/notificationScreen';
   const NotificationScreen({Key? key}) : super(key: key);
 
@@ -14,56 +14,41 @@ class NotificationScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        forceMaterialTransparency: true,
-        centerTitle: false,
-        title: Text(
-          'Notifications',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
+        title: const Text('Notifications'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Master notification toggle
           SwitchListTile.adaptive(
-            activeColor: Theme.of(context).colorScheme.primaryContainer,
             title: const Text('Enable Notifications'),
             value: notificationSettings.areNotificationsEnabled,
-            onChanged: (bool value) => ref.read(notificationSettingsProvider.notifier).toggleNotifications(value),
+            onChanged: (value) => ref.read(notificationSettingsProvider.notifier).toggleNotifications(value),
           ),
-
-          // Conditional settings when notifications are enabled
           if (notificationSettings.areNotificationsEnabled) ...[
-            // Mood Log Notifications
+            const Divider(),
             SwitchListTile.adaptive(
-              activeColor: Theme.of(context).colorScheme.primaryContainer,
-              title: const Text('Mood Log Notifications'),
-              subtitle: const Text('Get daily reminders to log your mood'),
+              title: const Text('Mood Log Reminders'),
+              subtitle: const Text('Daily reminders to log your mood'),
               value: notificationSettings.moodLogNotifications,
-              onChanged: (bool value) => ref.read(notificationSettingsProvider.notifier).toggleMoodLogNotifications(value),
+              onChanged: (value) => ref.read(notificationSettingsProvider.notifier).toggleMoodLogNotifications(value),
             ),
-
-            // Journal Entry Notifications
             SwitchListTile.adaptive(
-              activeColor: Theme.of(context).colorScheme.primaryContainer,
-              title: const Text('Journal Entry Notifications'),
-              subtitle: const Text('Get daily reminders to write journal entries'),
+              title: const Text('Journal Entry Reminders'),
+              subtitle: const Text('Daily reminders to write journal entries'),
               value: notificationSettings.journalEntryNotifications,
-              onChanged: (bool value) => ref.read(notificationSettingsProvider.notifier).toggleJournalEntryNotifications(value),
+              onChanged: (value) => ref.read(notificationSettingsProvider.notifier).toggleJournalEntryNotifications(value),
             ),
-
-            // Notification Time Picker
+            // SwitchListTile.adaptive(
+            //   title: const Text('Chat Notifications'),
+            //   subtitle: const Text('Notifications for new messages'),
+            //   value: notificationSettings.chatNotifications,
+            //   onChanged: (value) => ref.read(notificationSettingsProvider.notifier).toggleChatNotifications(value),
+            // ),
             ListTile(
               title: const Text('Notification Time'),
-              subtitle: Text(
-                notificationSettings.notificationTime.format(context),
-                style: const TextStyle(color: Colors.blue),
-              ),
+              subtitle: Text(notificationSettings.notificationTime.format(context)),
               trailing: const Icon(Icons.access_time),
-              onTap: () => _selectNotificationTime(context, ref),
+              onTap: () => _selectTime(context, ref),
             ),
           ],
         ],
@@ -71,21 +56,15 @@ class NotificationScreen extends HookConsumerWidget {
     );
   }
 
-  // Time picker method
-  Future<void> _selectNotificationTime(BuildContext context, WidgetRef ref) async {
-    final TimeOfDay? picked = await showTimePicker(
+  Future<void> _selectTime(BuildContext context, WidgetRef ref) async {
+    final initialTime = ref.read(notificationSettingsProvider).notificationTime;
+    final pickedTime = await showTimePicker(
       context: context,
-      initialTime: ref.read(notificationSettingsProvider).notificationTime,
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-          child: child!,
-        );
-      },
+      initialTime: initialTime,
     );
 
-    if (picked != null) {
-      ref.read(notificationSettingsProvider.notifier).updateNotificationTime(picked);
+    if (pickedTime != null) {
+      ref.read(notificationSettingsProvider.notifier).updateNotificationTime(pickedTime);
     }
   }
 }

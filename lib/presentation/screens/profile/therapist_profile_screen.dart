@@ -261,7 +261,7 @@ class TherapistProfileScreen extends HookConsumerWidget {
                           // Check if already exists without triggering permission error
                           final roomSnapshot = await FirebaseHelper.getDocument('chatRooms', chatRoomId);
 
-                          if (roomSnapshot?.exists == false) {
+                          if (roomSnapshot == null || roomSnapshot.exists == false) {
                             // Create if not exists
                             await chatNotifier.getOrCreateChatRoom(
                               psychologistId: psychologistsData.uid!,
