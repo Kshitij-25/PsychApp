@@ -59,8 +59,8 @@ class PsychologistProfileCreation extends HookConsumerWidget {
                           final ImagePicker picker = ImagePicker();
                           final XFile? image = await picker.pickImage(
                             source: ImageSource.gallery,
-                            maxWidth: 512,
-                            maxHeight: 512,
+                            maxWidth: 2048,
+                            maxHeight: 2048,
                             imageQuality: 90,
                           );
                           if (image != null) {

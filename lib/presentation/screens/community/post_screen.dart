@@ -16,7 +16,7 @@ import 'community_home.dart';
 
 final userProvider = FutureProvider.family<UserModel, String>((ref, uid) async {
   final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  return UserModel.fromFirestore(doc);
+  return UserModel.fromJson(doc.data() ?? {});
 });
 
 class PostScreen extends HookConsumerWidget {
@@ -173,7 +173,7 @@ class CommentWidget extends ConsumerWidget {
             final String? avatarData;
 
             if (user is UserModel) {
-              fullName = user.fullName;
+              fullName = user.fullName ?? '';
               avatarData = user.avatarData;
             } else if (user is PsychologistModel) {
               fullName = user.fullName!;

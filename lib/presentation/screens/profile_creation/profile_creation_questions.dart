@@ -33,7 +33,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
     // Set initial email
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        profileForm.updateField('email', FirebaseHelper.currentUser?.email);
+        profileForm.updateField(formState.copyWith(email: FirebaseHelper.currentUser?.email));
       });
       return null;
     }, []);
@@ -56,23 +56,23 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                           final ImagePicker picker = ImagePicker();
                           final XFile? image = await picker.pickImage(
                             source: ImageSource.gallery,
-                            maxWidth: 512,
-                            maxHeight: 512,
+                            maxWidth: 2048,
+                            maxHeight: 2048,
                             imageQuality: 90,
                           );
                           if (image != null) {
-                            profileForm.updateField('avatarPath', image.path);
+                            profileForm.updateField(formState.copyWith(avatarPath: image.path));
                           }
                         },
                         child: CircleAvatar(
                           radius: 70,
                           backgroundColor: Theme.of(context).colorScheme.primary,
-                          backgroundImage: formState['avatarPath'].isNotEmpty
-                              ? FileImage(File(formState['avatarPath']))
-                              : formState['avatarUrl'].isNotEmpty
-                                  ? NetworkImage(formState['avatarUrl']) as ImageProvider
+                          backgroundImage: formState.avatarPath?.isNotEmpty ?? false
+                              ? FileImage(File(formState.avatarPath!))
+                              : formState.avatarUrl?.isNotEmpty ?? false
+                                  ? NetworkImage(formState.avatarUrl!) as ImageProvider
                                   : null,
-                          child: formState['avatarPath'].isEmpty && formState['avatarUrl'].isEmpty
+                          child: (formState.avatarPath?.isEmpty ?? true) && (formState.avatarUrl?.isEmpty ?? true)
                               ? const Icon(
                                   CupertinoIcons.camera_fill,
                                   size: 30,
@@ -114,7 +114,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                         }
                         return null;
                       },
-                      onChanged: (value) => profileForm.updateField('fullName', value),
+                      onChanged: (value) => profileForm.updateField(formState.copyWith(fullName: value)),
                     ),
                     const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
@@ -128,7 +128,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                           child: Text(value),
                         );
                       }).toList(),
-                      onChanged: (value) => profileForm.updateField('gender', value),
+                      onChanged: (value) => profileForm.updateField(formState.copyWith(gender: value)),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please select your gender';
@@ -152,7 +152,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                         }
                         return null;
                       },
-                      onChanged: (value) => profileForm.updateField('phoneNumber', value),
+                      onChanged: (value) => profileForm.updateField(formState.copyWith(phoneNumber: value)),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -183,7 +183,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                           lastDate: DateTime.now(),
                         );
                         dobCont.text = DateFormat('dd-MM-yyyy').format(date!);
-                        profileForm.updateField('dateOfBirth', date);
+                        profileForm.updateField(formState.copyWith(dateOfBirth: date));
                       },
                     ),
                     const SizedBox(height: 10),
@@ -195,7 +195,7 @@ class ProfileCreationQuestions extends HookConsumerWidget {
                       ),
                       textInputAction: TextInputAction.done,
                       onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                      onChanged: (value) => profileForm.updateField('emergencyContact', value),
+                      onChanged: (value) => profileForm.updateField(formState.copyWith(emergencyContact: value)),
                     ),
                     const SizedBox(height: 16),
 

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../data/models/psychologist_model.dart';
+import '../../../shared/constants/firebase_helper.dart';
+import '../../notifiers/appointment_notifier.dart';
 import '../../widgets/custom_elevated_button.dart';
 
 class BookAppointmentScreen extends StatefulHookConsumerWidget {
@@ -196,23 +199,84 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                   Expanded(
                     child: CustomElevatedButton(
                       onPressed: (_selectedDay != null && _selectedTime != null)
-                          ? () {
-                              // Format the selected date and time
-                              final selectedDateTime = DateTime(
-                                _selectedDay!.year,
-                                _selectedDay!.month,
-                                _selectedDay!.day,
-                                int.parse(_selectedTime!.split(':')[0]),
-                                int.parse(_selectedTime!.split(':')[1]),
-                              );
+                          ? () async {
+                              try {
+                                // Show loading indicator
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+                                    content: Row(
+                                      children: [
+                                        CircularProgressIndicator(),
+                                        SizedBox(width: 16),
+                                        Text(
+                                          'Booking appointment...',
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                color: Theme.of(context).colorScheme.onTertiaryContainer,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                                final selectedDateTime = DateTime(
+                                  _selectedDay!.year,
+                                  _selectedDay!.month,
+                                  _selectedDay!.day,
+                                  int.parse(_selectedTime!.split(':')[0]),
+                                  int.parse(_selectedTime!.split(':')[1]),
+                                );
 
-                              final formattedDateTime = DateFormat('dd MMM yyyy, hh:mm a').format(selectedDateTime);
+                                final formattedDateTime = DateFormat('dd MMM yyyy, hh:mm a').format(selectedDateTime);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Appointment set for $formattedDateTime"),
-                                ),
-                              );
+                                // Book appointment
+                                await ref.read(appointmentProvider.notifier).bookAppointment(
+                                    userId: FirebaseHelper.currentUserId!,
+                                    professionalId: widget.psychologistsData.uid ?? '',
+                                    appointmentDateTime: selectedDateTime,
+                                    consultationFee: 0.0,
+                                    specialization: widget.psychologistsData.specialization ?? '');
+
+                                if (context.mounted) {
+                                  // Show success message
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      content: Text(
+                                        'Appointment set for $formattedDateTime',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                              color: Theme.of(context).colorScheme.onTertiaryContainer,
+                                            ),
+                                      ),
+                                      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+                                    ),
+                                  );
+
+                                  // Navigate back
+                                  context.pop();
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  // Show error message
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      content: Text(
+                                        'Failed to book appointment: ${e.toString()}',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                              color: Theme.of(context).colorScheme.error,
+                                            ),
+                                      ),
+                                      backgroundColor: Theme.of(context).colorScheme.errorContainer,
+                                    ),
+                                  );
+                                }
+                              }
                             }
                           : null,
                       buttonLabel: 'Confirm Appointment',
@@ -225,7 +289,7 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                         ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

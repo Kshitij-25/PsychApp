@@ -5,34 +5,27 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserProfileFormNotifier extends StateNotifier<Map<String, dynamic>> {
-  UserProfileFormNotifier()
-      : super({
-          'email': '',
-          'fullName': '',
-          'gender': '',
-          'phoneNumber': '',
-          'avatarPath': '',
-          'avatarUrl': '',
-          'avatarData': '',
-          'dateOfBirth': null,
-          'emergencyContact': '',
-          // 'preferredLanguage': 'English',
-          // 'timeZone': '',
-          // 'occupation': '',
-          // 'stressLevel': 1,
-          // 'sleepHours': 8,
-          // 'previousTherapy': false,
-          // 'medications': [],
-          // 'interests': [],
-          // 'goals': [],
-          'role': 'user',
-          'createdAt': DateTime.now(),
-          'updatedAt': DateTime.now(),
-        });
+import '../../data/models/user_model.dart';
 
-  void updateField(String field, dynamic value) {
-    state = {...state, field: value};
+class UserProfileFormNotifier extends StateNotifier<UserModel> {
+  UserProfileFormNotifier()
+      : super(UserModel(
+          email: '',
+          fullName: '',
+          gender: '',
+          phoneNumber: '',
+          avatarData: '',
+          avatarPath: '',
+          avatarUrl: '',
+          role: 'user',
+          dateOfBirth: null,
+          emergencyContact: '',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ));
+
+  void updateField(UserModel userModel) {
+    state = userModel;
   }
 
   Future<String?> processImage(String filePath) async {
@@ -60,14 +53,14 @@ class UserProfileFormNotifier extends StateNotifier<Map<String, dynamic>> {
 
   Future<bool> submitProfile(String userId) async {
     try {
-      state = {...state, 'updatedAt': DateTime.now()};
+      state = state.copyWith(updatedAt: DateTime.now());
 
       // Process image if exists
-      if (state['avatarPath'].isNotEmpty) {
+      if (state.avatarPath!.isNotEmpty) {
         try {
-          final base64Image = await processImage(state['avatarPath']);
+          final base64Image = await processImage(state.avatarPath!);
           if (base64Image != null) {
-            state = {...state, 'avatarData': base64Image};
+            state = state.copyWith(avatarData: base64Image);
           }
         } catch (e) {
           print('Image processing failed: $e');
@@ -76,7 +69,7 @@ class UserProfileFormNotifier extends StateNotifier<Map<String, dynamic>> {
       }
 
       // Prepare data for Firestore
-      final dataToSave = Map<String, dynamic>.from(state);
+      final dataToSave = state.toJson();
 
       if (dataToSave.toString().length > 900000) {
         // Leave room for metadata
@@ -96,6 +89,6 @@ class UserProfileFormNotifier extends StateNotifier<Map<String, dynamic>> {
   }
 }
 
-final userProfileFormProvider = StateNotifierProvider<UserProfileFormNotifier, Map<String, dynamic>>(
+final userProfileFormProvider = StateNotifierProvider<UserProfileFormNotifier, UserModel>(
   (ref) => UserProfileFormNotifier(),
 );

@@ -35,7 +35,7 @@ class SearchScreen extends HookConsumerWidget {
                   ),
                   tabs: [
                     Tab(text: 'Therapists'),
-                    Tab(text: 'History'),
+                    Tab(text: 'Appointments'),
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -119,10 +120,11 @@ class PostContent extends ConsumerWidget {
 
         return GestureDetector(
           onTap: () {
-            context.pushNamed(
-              PostScreen.routeName,
-              extra: post.id,
-            );
+            if (isCardVisible != false)
+              context.pushNamed(
+                PostScreen.routeName,
+                extra: post.id,
+              );
           },
           child: _PostCard(
             isCardVisible: isCardVisible!,
@@ -155,25 +157,36 @@ class PostContent extends ConsumerWidget {
                     ),
                   ),
                   if (post.imageData != null && post.imageData != '')
-                    GestureDetector(
-                      onTap: () {
-                        if (postImageBytes != null) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                              child: InteractiveViewer(
-                                child: Image.memory(
-                                  postImageBytes!,
-                                  fit: BoxFit.contain,
+                    ConstrainedBox(
+                      constraints: BoxConstraints.fromViewConstraints(
+                        ViewConstraints(
+                          maxHeight: 500,
+                          minWidth: double.infinity,
+                        ),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (postImageBytes != null) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                child: InteractiveViewer(
+                                  child: Image.memory(
+                                    postImageBytes!,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.memory(postImageBytes!),
+                            );
+                          }
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.memory(
+                            postImageBytes!,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
                     ),
                   Padding(

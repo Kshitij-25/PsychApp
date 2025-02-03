@@ -10,8 +10,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/models/psychologist_model.dart';
 import '../../../shared/constants/assets.dart';
-import '../journal/journal_screen.dart';
 import '../community/community_home.dart';
+import '../journal/journal_screen.dart';
 import '../profile/profile_screen.dart';
 import '../search/search_screen.dart';
 import '../search/therapist_search_screen.dart';
@@ -38,10 +38,6 @@ class PsychologistNotifier extends StateNotifier<List<PsychologistModel>> {
     }
   }
 }
-
-final psychologistProvider = StateNotifierProvider<PsychologistNotifier, List<PsychologistModel>>(
-  (ref) => PsychologistNotifier(),
-);
 
 class HomeNavigator extends HookWidget {
   static const routeName = '/homeNavigator';

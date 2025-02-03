@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,8 @@ class CommunityPostScreen extends HookConsumerWidget {
       final ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(
         source: ImageSource.gallery,
-        maxWidth: 512,
-        maxHeight: 512,
+        maxWidth: 2048,
+        maxHeight: 2048,
         imageQuality: 90,
       );
       if (image != null) {
@@ -84,17 +85,18 @@ class CommunityPostScreen extends HookConsumerWidget {
                 child: Stack(
                   alignment: Alignment.topRight,
                   children: [
-                    Container(
-                      height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                    ConstrainedBox(
+                      constraints: BoxConstraints.fromViewConstraints(
+                        ViewConstraints(
+                          maxHeight: 500,
+                          minWidth: double.infinity,
+                        ),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.file(
                           selectedImage.value!,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                       ),
                     ),
