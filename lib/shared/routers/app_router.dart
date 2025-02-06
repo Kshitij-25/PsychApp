@@ -16,6 +16,7 @@ import '../../presentation/screens/community/community_post_screen.dart';
 import '../../presentation/screens/community/post_screen.dart';
 import '../../presentation/screens/home/home_navigator.dart';
 import '../../presentation/screens/home/psychologist_home_nav.dart';
+import '../../presentation/screens/internet/no_internet_screen.dart';
 import '../../presentation/screens/journal/create_journal_screen.dart';
 import '../../presentation/screens/journal/journal_screen.dart';
 import '../../presentation/screens/mood/mood_navigator.dart';
@@ -263,6 +264,14 @@ class AppRouter {
         );
       },
       routes: [],
+    ),
+    GoRoute(
+      name: NoInternetScreen.routeName,
+      path: NoInternetScreen.routeName,
+      pageBuilder: (context, state) => MaterialPage(
+        key: state.pageKey,
+        child: NoInternetScreen(),
+      ),
     ),
   ];
 }

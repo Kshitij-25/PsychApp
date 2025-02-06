@@ -112,7 +112,9 @@ class AppointmentWidget extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        appointment.specialization,
+                        (appointment.specialization.isNotEmpty)
+                            ? appointment.specialization[0].toUpperCase() + appointment.specialization.substring(1)
+                            : 'N/A',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(
                               color: Theme.of(context).colorScheme.outline,
                             ),

@@ -15,4 +15,5 @@ class Assets {
   static const happy = 'assets/lottie/Animation - 1737205889692.json';
   static const sad = 'assets/lottie/Animation - 1737205912839.json';
   static const neutral = 'assets/lottie/Animation - 1737205926371.json';
+  static const meditation = 'assets/lottie/meditation.json';
 }

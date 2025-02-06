@@ -146,28 +146,28 @@ class LandingScreen extends HookConsumerWidget {
           ),
         ),
         Text(
-          'Mental',
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+          'MindNest',
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
                 color: Theme.of(context).colorScheme.primaryContainer,
               ),
         ),
-        Text(
-          'Health',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Theme.of(context).colorScheme.primaryContainer,
-              ),
-        ),
+        // Text(
+        //   'Health',
+        //   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+        //         color: Theme.of(context).colorScheme.primaryContainer,
+        //       ),
+        // ),
+        // SizedBox(height: 20),
+        // Text(
+        //   'Start Psychotherapy today',
+        //   textAlign: TextAlign.center,
+        //   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        // ),
         SizedBox(height: 20),
         Text(
-          'Start Psychotherapy today',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-        SizedBox(height: 10),
-        Text(
-          'Mental health is a convenient service\nfor online therapy',
+          'A safe space for your mental well-being',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).hintColor,

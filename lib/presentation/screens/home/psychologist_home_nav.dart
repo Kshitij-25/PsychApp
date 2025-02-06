@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../notifiers/auth_notifier.dart';
+import '../appointment/psychologists_appointment_screen.dart';
 import '../chat/psychologist_inbox.dart';
 import '../community/community_home.dart';
 import '../community/community_post_screen.dart';
@@ -44,15 +45,23 @@ class PsychologistHomeNav extends HookConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                   )
-                : Text(
-                    'Profile',
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                : currentIndex.value == 2
+                    ? Text(
+                        'Appointments',
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      )
+                    : Text(
+                        'Profile',
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
         actions: [
-          if (currentIndex.value == 2)
+          if (currentIndex.value == 3)
             TextButton(
               onPressed: () => _handleLogout(context, ref, authNotifier),
               child: Text('Logout'),
@@ -68,6 +77,7 @@ class PsychologistHomeNav extends HookConsumerWidget {
         children: [
           CommunityHome(),
           PsychologistInbox(),
+          PsychologistsAppointmentScreen(),
           PsychologistProfilePanel(),
         ],
       ),
@@ -111,6 +121,10 @@ class PsychologistHomeNav extends HookConsumerWidget {
         BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.chat_bubble_text_fill),
           label: 'Chats',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(CupertinoIcons.calendar),
+          label: 'Appointments',
         ),
         BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.person_fill),

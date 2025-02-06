@@ -11,6 +11,7 @@ import 'package:psych_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'services/netwok/network_helper.dart';
 import 'services/notifications/local_notification_service.dart';
 import 'shared/routers/app_router.dart';
 
@@ -44,6 +45,8 @@ void main() async {
   await dotenv.load();
 
   final prefs = await SharedPreferences.getInstance();
+
+  NetworkHelper.initialize(); // Add this
 
   await AppRouter.setupRoutes();
 
