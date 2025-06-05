@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../data/models/journal_entry.dart';
+import '../../../../data/firebase_models/journal_entry.dart';
 import '../create_journal_screen.dart';
 
 class JournalCard extends StatelessWidget {

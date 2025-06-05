@@ -1,17 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:psych_app/presentation/widgets/custom_elevated_button.dart';
 
 import '../../../shared/constants/assets.dart';
-import '../auth/email_verification_screen.dart';
 import '../auth/login_screen.dart';
+import '../home/home_navigator.dart';
 
 // providers/psychologist_mode_provider.dart
 final psychologistModeProvider = StateProvider<bool>((ref) => false);
@@ -89,7 +87,7 @@ class LandingScreen extends HookConsumerWidget {
               ),
               Spacer(),
               _buildButtons(context, ref),
-              Spacer(flex: 3),
+              Spacer(flex: 2),
               // _buildDividerWithText(context),
               // SizedBox(height: 20),
               // _buildOtherSignInOptions(context),
@@ -99,39 +97,39 @@ class LandingScreen extends HookConsumerWidget {
         ),
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: AnimatedSwitcher(
-        switchInCurve: Curves.easeInSine,
-        switchOutCurve: Curves.easeOutSine,
-        duration: const Duration(milliseconds: 200),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return ScaleTransition(scale: animation, child: child);
-        },
-        child: isExtended.value
-            ? FloatingActionButton.extended(
-                key: const ValueKey('extended'),
-                enableFeedback: true,
-                label: isPsychologistMode ? const Text('User Mode') : const Text('Psychologist Mode'),
-                icon: isPsychologistMode ? Icon(CupertinoIcons.person_fill) : const Icon(FontAwesomeIcons.brain),
-                onPressed: () => showPsychologistDialog(context),
-              )
-            : FloatingActionButton.small(
-                key: const ValueKey('icon'),
-                enableFeedback: true,
-                child: isPsychologistMode
-                    ? Icon(
-                        CupertinoIcons.person_fill,
-                        size: 20,
-                      )
-                    : const Icon(
-                        FontAwesomeIcons.brain,
-                        size: 15,
-                      ),
-                onPressed: () {
-                  isExtended.value = true;
-                  showPsychologistDialog(context);
-                },
-              ),
-      ),
+      // floatingActionButton: AnimatedSwitcher(
+      //   switchInCurve: Curves.easeInSine,
+      //   switchOutCurve: Curves.easeOutSine,
+      //   duration: const Duration(milliseconds: 200),
+      //   transitionBuilder: (Widget child, Animation<double> animation) {
+      //     return ScaleTransition(scale: animation, child: child);
+      //   },
+      //   child: isExtended.value
+      //       ? FloatingActionButton.extended(
+      //           key: const ValueKey('extended'),
+      //           enableFeedback: true,
+      //           label: isPsychologistMode ? const Text('User Mode') : const Text('Psychologist Mode'),
+      //           icon: isPsychologistMode ? Icon(CupertinoIcons.person_fill) : const Icon(FontAwesomeIcons.brain),
+      //           onPressed: () => showPsychologistDialog(context),
+      //         )
+      //       : FloatingActionButton.small(
+      //           key: const ValueKey('icon'),
+      //           enableFeedback: true,
+      //           child: isPsychologistMode
+      //               ? Icon(
+      //                   CupertinoIcons.person_fill,
+      //                   size: 20,
+      //                 )
+      //               : const Icon(
+      //                   FontAwesomeIcons.brain,
+      //                   size: 15,
+      //                 ),
+      //           onPressed: () {
+      //             isExtended.value = true;
+      //             showPsychologistDialog(context);
+      //           },
+      //         ),
+      // ),
     );
   }
 
@@ -184,7 +182,8 @@ class LandingScreen extends HookConsumerWidget {
         FractionallySizedBox(
           widthFactor: 0.83,
           child: CustomElevatedButton(
-            buttonLabel: isPsychologistMode ? 'Login as a Psychologist ' : 'Login',
+            // buttonLabel: isPsychologistMode ? 'Login as a Psychologist ' : 'Login',
+            buttonLabel: 'Get Started',
             onPressed: () {
               context.pushNamed(LoginScreen.routeName);
             },
@@ -197,13 +196,36 @@ class LandingScreen extends HookConsumerWidget {
             ),
           ),
         ),
+        // SizedBox(height: 20),
+        // FractionallySizedBox(
+        //   widthFactor: 0.83,
+        //   child: CustomElevatedButton(
+        //     buttonLabel: isPsychologistMode ? 'Register as a Psychologist' : 'Register',
+        //     onPressed: () {
+        //       context.pushNamed(EmailVerificationScreen.routeName);
+        //     },
+        //     buttonStyle: ElevatedButton.styleFrom(
+        //       enableFeedback: true,
+        //       // overlayColor: Colors.transparent,
+        //       elevation: 0,
+        //       backgroundColor: Theme.of(context).buttonTheme.colorScheme!.primaryContainer,
+        //       // backgroundColor: Theme.of(context).buttonTheme.colorScheme!.surface,
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(8),
+        //       ),
+        //     ),
+        //     // textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+        //     //       // color: Theme.of(context).hintColor,
+        //     //     ),
+        //   ),
+        // ),
         SizedBox(height: 20),
         FractionallySizedBox(
           widthFactor: 0.83,
           child: CustomElevatedButton(
-            buttonLabel: isPsychologistMode ? 'Register as a Psychologist' : 'Register',
+            buttonLabel: 'Explore as Guest',
             onPressed: () {
-              context.pushNamed(EmailVerificationScreen.routeName);
+              context.go(HomeNavigator.routeName);
             },
             buttonStyle: ElevatedButton.styleFrom(
               enableFeedback: true,

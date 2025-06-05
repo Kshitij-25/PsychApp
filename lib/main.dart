@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'services/netwok/network_helper.dart';
 import 'services/notifications/local_notification_service.dart';
+import 'shared/constants/hive_helper.dart';
 import 'shared/routers/app_router.dart';
 
 void main() async {
@@ -40,15 +41,22 @@ void main() async {
     FlutterError.presentError(details);
     debugPrint('Flutter error: ${details.exception}');
   };
+
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await dotenv.load();
 
   final prefs = await SharedPreferences.getInstance();
 
-  NetworkHelper.initialize(); // Add this
+  await HiveHelper.init();
+
+  // if (kDebugMode) {
+  //   HiveHelper.deleteUser();
+  // }
 
   await AppRouter.setupRoutes();
+
+  NetworkHelper.initialize(); // Add this
 
   // Initialize notification service
   await LocalNotificationService.initialize();

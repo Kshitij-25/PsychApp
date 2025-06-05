@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:psych_app/presentation/screens/community/post_screen.dart';
 
-import '../../../data/models/appointment_model.dart';
+import '../../../data/firebase_models/appointment_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
 import '../../notifiers/appointment_notifier.dart';
 import '../community/community_home.dart';

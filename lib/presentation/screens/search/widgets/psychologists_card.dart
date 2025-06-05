@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../data/models/psychologist_model.dart';
+import '../../../../data/firebase_models/psychologist_model.dart';
 
 class PsychologistsCard extends StatelessWidget {
   const PsychologistsCard({

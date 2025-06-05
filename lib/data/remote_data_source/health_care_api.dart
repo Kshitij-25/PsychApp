@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../error_handling/dio_error_handler.dart';
-import '../models/articles.dart';
+import '../firebase_models/articles.dart';
 
 final newsApiServiceProvider = Provider<NewsApiService>((ref) {
   return NewsApiService();

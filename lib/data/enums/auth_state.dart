@@ -1,27 +1,30 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import '../models/api_model.dart';
+import '../models/login_model.dart';
 
 class AuthState {
-  final User? user;
   final bool isLoading;
+  final LoginModel? user;
+  final ApiModel? apiModel;
   final String? error;
 
   AuthState({
-    this.user,
     this.isLoading = false,
+    this.user,
+    this.apiModel,
     this.error,
   });
 
   AuthState copyWith({
-    User? user,
     bool? isLoading,
+    LoginModel? user,
+    ApiModel? apiModel,
     String? error,
-    String? phoneNumber,
-    String? verificationId,
   }) {
     return AuthState(
-      user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
+      user: user ?? this.user,
+      apiModel: apiModel ?? this.apiModel,
+      error: error, // ✅ Don't default to the previous error
     );
   }
 }

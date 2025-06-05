@@ -4,12 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../notifiers/auth_notifier.dart';
 import '../../notifiers/icon_state_notifier.dart';
+import '../../providers/auth_providers.dart';
 import '../../widgets/custom_elevated_button.dart';
-import '../profile_creation/profile_creation_questions.dart';
-import '../profile_creation/psychologist_profile_creation.dart';
-import '../welcome/landing_screen.dart';
+import '../profile_creation/professional_profile_creation.dart';
+import '../profile_creation/user_profile_creation.dart';
 import 'login_screen.dart';
 
 class EmailVerificationScreen extends HookConsumerWidget {
@@ -21,34 +20,148 @@ class EmailVerificationScreen extends HookConsumerWidget {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
-    final isPsychologistMode = ref.watch(psychologistModeProvider);
+
+    final selectedRole = useState('');
 
     final formKey = GlobalKey<FormState>();
 
-    final authNotifier = ref.watch(authStateNotifierProvider.notifier);
-    final authState = ref.watch(authStateNotifierProvider);
+    final authNotifier = ref.watch(authNotifierProvider.notifier);
+    final authState = ref.watch(authNotifierProvider);
 
     void handleSignUp() async {
-      if (formKey.currentState!.validate()) {
-        if (passwordController.text == confirmPasswordController.text) {
+      if (selectedRole.value == '') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(
+              'Please select a role to continue',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      } else if (selectedRole.value == 'PROFESSIONAL') {
+        if (formKey.currentState!.validate()) {
+          if (passwordController.text == confirmPasswordController.text)
+            try {
+              final professionalRegister = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog.adaptive(
+                    title: Text('Register as a Professional'),
+                    content: Text('Are you sure you want to continue as a Professional?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => context.pop(false),
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () => context.pop(true),
+                        child: Text('Yes'),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (professionalRegister == true) {
+                final response = await authNotifier.registerUser(
+                  emailController.text.toLowerCase().trim(),
+                  passwordController.text.trim(),
+                  selectedRole.value,
+                );
+
+                // ✅ Only navigate if the user is successfully logged in
+                if (response != null && response.message == 'User successfully registered') {
+                  context.goNamed(
+                    ProfessionalProfileCreation.routeName,
+                    extra: emailController.text,
+                  );
+                  // ProfileCreationQuestions.routeName;
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text(
+                        response?.message ?? '',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onError,
+                            ),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                  );
+                }
+              }
+            } catch (e) {
+              // ✅ Show error in Snackbar
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(
+                    e.toString().replaceFirst("Exception: ", ""),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onError,
+                        ),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+            }
+          else {
+            // ✅ Show error in Snackbar
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                behavior: SnackBarBehavior.floating,
+                content: Text(
+                  "Passwords don't match",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onError,
+                      ),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
+        }
+      } else {
+        if (passwordController.text == confirmPasswordController.text)
           try {
-            await authNotifier.signUpWithEmail(
+            final response = await authNotifier.registerUser(
               emailController.text.toLowerCase().trim(),
               passwordController.text.trim(),
-              isPsychologistMode ? 'psychologist' : 'user',
+              selectedRole.value,
             );
 
-            ref.invalidate(authStateNotifierProvider);
-
-            if (authState.user == null) {
-              context.go(
-                isPsychologistMode ? PsychologistProfileCreation.routeName : ProfileCreationQuestions.routeName,
+            // ✅ Only navigate if the user is successfully logged in
+            if (response != null && response.message == 'User successfully registered') {
+              context.goNamed(
+                UserProfileCreation.routeName,
+                extra: emailController.text,
               );
-              emailController.clear();
-              passwordController.clear();
-              confirmPasswordController.clear();
+              // ProfileCreationQuestions.routeName;
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(
+                    response?.message ?? '',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onError,
+                        ),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
             }
           } catch (e) {
+            // ✅ Show error in Snackbar
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -63,12 +176,13 @@ class EmailVerificationScreen extends HookConsumerWidget {
               ),
             );
           }
-        } else {
+        else {
+          // ✅ Show error in Snackbar
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               behavior: SnackBarBehavior.floating,
               content: Text(
-                'Passwords do not match',
+                "Passwords don't match",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onError,
@@ -111,6 +225,41 @@ class EmailVerificationScreen extends HookConsumerWidget {
                       confirmPasswordController: confirmPasswordController,
                       iconState: ref.watch(iconStateProvider),
                       ref: ref,
+                    ),
+                    const Spacer(flex: 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Choose your role:'),
+                        Spacer(flex: 3),
+                        ChoiceChip(
+                          label: Text('User'),
+                          selected: selectedRole.value == 'USER',
+                          onSelected: (bool selected) {
+                            selectedRole.value = selected ? 'USER' : '';
+                          },
+                          selectedColor: Theme.of(context).colorScheme.primaryContainer,
+                          backgroundColor: Theme.of(context).colorScheme.surface,
+                          labelStyle: TextStyle(
+                            color: selectedRole.value == 'USER' ? Colors.white : Theme.of(context).colorScheme.onSurface,
+                          ),
+                          showCheckmark: false,
+                        ),
+                        Spacer(flex: 1),
+                        ChoiceChip(
+                          label: Text('Professional'),
+                          selected: selectedRole.value == 'PROFESSIONAL',
+                          onSelected: (bool selected) {
+                            selectedRole.value = selected ? 'PROFESSIONAL' : '';
+                          },
+                          selectedColor: Theme.of(context).colorScheme.primaryContainer,
+                          backgroundColor: Theme.of(context).colorScheme.surface,
+                          labelStyle: TextStyle(
+                            color: selectedRole.value == 'PROFESSIONAL' ? Colors.white : Theme.of(context).colorScheme.onSurface,
+                          ),
+                          showCheckmark: false,
+                        ),
+                      ],
                     ),
                     const Spacer(flex: 1),
                     CustomElevatedButton(

@@ -3,7 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/models/journal_entry.dart';
+import '../../../data/firebase_models/journal_entry.dart';
 import '../../notifiers/journal_notifier.dart';
 
 class CreateJournalScreen extends StatefulHookConsumerWidget {
@@ -105,46 +105,46 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
           ),
         ],
         centerTitle: true,
-        title: // Quill Toolbar
-            QuillToolbar.simple(
-          controller: quillController,
-          configurations: QuillSimpleToolbarConfigurations(
-            showAlignmentButtons: false,
-            showListBullets: false,
-            showColorButton: false,
-            showBackgroundColorButton: false,
-            showBoldButton: false,
-            showCenterAlignment: false,
-            showClearFormat: false,
-            showClipboardCopy: false,
-            showClipboardCut: false,
-            showClipboardPaste: false,
-            showCodeBlock: false,
-            showDirection: false,
-            showDividers: false,
-            showFontFamily: false,
-            showFontSize: false,
-            showHeaderStyle: false,
-            showIndent: false,
-            showInlineCode: false,
-            showItalicButton: false,
-            showJustifyAlignment: false,
-            showLeftAlignment: false,
-            showLineHeightButton: false,
-            showLink: false,
-            showListCheck: false,
-            showListNumbers: false,
-            showQuote: false,
-            showRightAlignment: false,
-            showSearchButton: false,
-            showSmallButton: false,
-            showStrikeThrough: false,
-            showSubscript: false,
-            showSuperscript: false,
-            showUnderLineButton: false,
-            multiRowsDisplay: false,
-          ),
-        ),
+        // title: // Quill Toolbar
+        //     QuillToolbar.simple(
+        //   controller: quillController,
+        //   configurations: QuillSimpleToolbarConfigurations(
+        //     showAlignmentButtons: false,
+        //     showListBullets: false,
+        //     showColorButton: false,
+        //     showBackgroundColorButton: false,
+        //     showBoldButton: false,
+        //     showCenterAlignment: false,
+        //     showClearFormat: false,
+        //     showClipboardCopy: false,
+        //     showClipboardCut: false,
+        //     showClipboardPaste: false,
+        //     showCodeBlock: false,
+        //     showDirection: false,
+        //     showDividers: false,
+        //     showFontFamily: false,
+        //     showFontSize: false,
+        //     showHeaderStyle: false,
+        //     showIndent: false,
+        //     showInlineCode: false,
+        //     showItalicButton: false,
+        //     showJustifyAlignment: false,
+        //     showLeftAlignment: false,
+        //     showLineHeightButton: false,
+        //     showLink: false,
+        //     showListCheck: false,
+        //     showListNumbers: false,
+        //     showQuote: false,
+        //     showRightAlignment: false,
+        //     showSearchButton: false,
+        //     showSmallButton: false,
+        //     showStrikeThrough: false,
+        //     showSubscript: false,
+        //     showSuperscript: false,
+        //     showUnderLineButton: false,
+        //     multiRowsDisplay: false,
+        //   ),
+        // ),
       ),
       body: Column(
         children: [
@@ -161,24 +161,24 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
           // ),
 
           // // Quill Editor
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: QuillEditor(
-                controller: quillController,
-                focusNode: FocusNode(),
-                scrollController: ScrollController(),
-                configurations: QuillEditorConfigurations(
-                  onTapOutside: (event, focusNode) {
-                    focusNode.unfocus();
-                  },
-                  scrollable: true,
-                  disableClipboard: true,
-                  placeholder: 'Start writing your thoughts here..',
-                ),
-              ),
-            ),
-          ),
+          // Expanded(
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          //     child: QuillEditor(
+          //       controller: quillController,
+          //       focusNode: FocusNode(),
+          //       scrollController: ScrollController(),
+          //       configurations: QuillEditorConfigurations(
+          //         onTapOutside: (event, focusNode) {
+          //           focusNode.unfocus();
+          //         },
+          //         scrollable: true,
+          //         disableClipboard: true,
+          //         placeholder: 'Start writing your thoughts here..',
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

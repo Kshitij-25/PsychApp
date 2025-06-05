@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/models/journal_entry.dart';
+import '../../../data/firebase_models/journal_entry.dart';
 import '../../notifiers/journal_notifier.dart';
 import 'create_journal_screen.dart';
 import 'journal_delegate.dart';

@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/comment_model.dart';
+import '../../data/firebase_models/comment_model.dart';
 import '../../shared/constants/firebase_helper.dart';
 
 final postInteractionProvider = StateNotifierProvider.family<PostInteractionNotifier, AsyncValue<void>, String>((ref, postId) {

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/local_data_source/psychologists_type.dart';
-import '../../../data/models/psychologist_model.dart';
+import '../../../data/firebase_models/psychologist_model.dart';
+import '../../../data/local_data_source/expertise_data.dart';
 import '../../../shared/constants/firebase_helper.dart';
 import '../profile/therapist_profile_screen.dart';
 import 'widgets/psychologists_card.dart';

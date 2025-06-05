@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../data/models/appointment_model.dart';
+import '../../../data/firebase_models/appointment_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
 import '../../notifiers/appointment_notifier.dart';
 import '../community/post_screen.dart';

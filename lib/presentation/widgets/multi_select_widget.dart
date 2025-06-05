@@ -33,7 +33,8 @@ class MultiSelectChip extends StatelessWidget {
               showCheckmark: false,
               selectedColor: Theme.of(context).colorScheme.primaryContainer,
               labelStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 13,
               ),
               visualDensity: VisualDensity.compact,
               onSelected: (selected) {

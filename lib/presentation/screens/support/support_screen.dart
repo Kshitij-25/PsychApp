@@ -6,9 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../notifiers/auth_notifier.dart';
-import '../welcome/landing_screen.dart';
-
 class SupportScreen extends HookConsumerWidget {
   static const routeName = '/supportScreen';
 
@@ -18,7 +15,7 @@ class SupportScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordController = useTextEditingController();
 
-    final authNotifier = ref.watch(authStateNotifierProvider.notifier);
+    // final authNotifier = ref.watch(authStateNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -89,23 +86,23 @@ class SupportScreen extends HookConsumerWidget {
                 ),
               );
 
-              if (shouldSignOut == true) {
-                // Sign out and wait for the user state to update
-                await authNotifier.deleteFirebaseAccount(passwordController.text);
+              // if (shouldSignOut == true) {
+              //   // Sign out and wait for the user state to update
+              //   await authNotifier.deleteFirebaseAccount(passwordController.text);
 
-                ref.invalidate(authStateNotifierProvider);
-                passwordController.clear();
+              //   ref.invalidate(authStateNotifierProvider);
+              //   passwordController.clear();
 
-                // Redirect to the landing screen only after user is null
-                ref.listenManual(
-                  authStateNotifierProvider,
-                  (previous, next) {
-                    if (next.user == null) {
-                      context.pushReplacementNamed(LandingScreen.routeName);
-                    }
-                  },
-                );
-              }
+              //   // Redirect to the landing screen only after user is null
+              //   ref.listenManual(
+              //     authStateNotifierProvider,
+              //     (previous, next) {
+              //       if (next.user == null) {
+              //         context.pushReplacementNamed(LandingScreen.routeName);
+              //       }
+              //     },
+              //   );
+              // }
             },
           ),
         ],

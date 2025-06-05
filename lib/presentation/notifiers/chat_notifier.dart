@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/chat_message.dart';
-import '../../data/models/chat_room.dart';
+import '../../data/firebase_models/chat_message.dart';
+import '../../data/firebase_models/chat_room.dart';
 import '../../shared/constants/firebase_helper.dart';
 
 final chatProvider = StateNotifierProvider<ChatNotifier, AsyncValue<List<ChatMessage>>>((ref) {

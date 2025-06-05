@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../data/models/articles.dart';
-import '../../data/models/journal_entry.dart';
-import '../../data/models/psychologist_model.dart';
+import '../../data/firebase_models/articles.dart';
+import '../../data/firebase_models/journal_entry.dart';
+import '../../data/firebase_models/psychologist_model.dart';
 import '../../presentation/screens/appointment/book_appointment_screen.dart';
 import '../../presentation/screens/article/article_screen.dart';
 import '../../presentation/screens/auth/email_verification_screen.dart';
@@ -22,37 +21,39 @@ import '../../presentation/screens/journal/journal_screen.dart';
 import '../../presentation/screens/mood/mood_navigator.dart';
 import '../../presentation/screens/notifications/notification_screen.dart';
 import '../../presentation/screens/profile/therapist_profile_screen.dart';
-import '../../presentation/screens/profile_creation/profile_creation_questions.dart';
-import '../../presentation/screens/profile_creation/psychologist_profile_creation.dart';
+import '../../presentation/screens/profile_creation/professional_profile_creation.dart';
+import '../../presentation/screens/profile_creation/user_profile_creation.dart';
 import '../../presentation/screens/questionnaire/initial_questions_screen.dart';
 import '../../presentation/screens/questionnaire/questionnaire_permission_screen.dart';
 import '../../presentation/screens/support/support_screen.dart';
 import '../../presentation/screens/welcome/landing_screen.dart';
 import '../../presentation/screens/welcome/onboarding_screen.dart';
 import '../../presentation/screens/welcome/splash_screen.dart';
-import '../constants/firebase_helper.dart';
+import '../constants/hive_helper.dart';
 
 class AppRouter {
   AppRouter._();
 
   static Future<String?> checkUserRole() async {
-    User? user = FirebaseHelper.currentUser;
+    final String? userRole = await HiveHelper.getUserRole();
 
-    if (user != null) {
-      String userRole = await FirebaseHelper.getUserRole(user.uid);
-      if (userRole == 'user') {
+    final isLoggedIn = await HiveHelper.isLoggedIn();
+
+    if (userRole != null && isLoggedIn == true) {
+      if (userRole == 'USER') {
         return HomeNavigator.routeName;
-      } else {
+      } else if (userRole == 'PSYCHOLOGIST') {
         return PsychologistHomeNav.routeName;
       }
     }
-    return SplashScreen.routeName;
+    return SplashScreen.routeName; // Default route
   }
 
   static late GoRouter router;
 
   static Future<void> setupRoutes() async {
     final initialRoute = await checkUserRole();
+    // final initialRoute = SplashScreen.routeName;
     router = GoRouter(
       debugLogDiagnostics: false,
       initialLocation: initialRoute,
@@ -100,26 +101,34 @@ class AppRouter {
       ],
     ),
     GoRoute(
-      name: ProfileCreationQuestions.routeName,
-      path: ProfileCreationQuestions.routeName,
-      builder: (context, state) => ProfileCreationQuestions(),
+      name: UserProfileCreation.routeName,
+      path: UserProfileCreation.routeName,
+      builder: (context, state) => UserProfileCreation(
+        userEmail: state.extra as String,
+      ),
       routes: [],
     ),
     GoRoute(
-      name: PsychologistProfileCreation.routeName,
-      path: PsychologistProfileCreation.routeName,
-      builder: (context, state) => PsychologistProfileCreation(),
+      name: ProfessionalProfileCreation.routeName,
+      path: ProfessionalProfileCreation.routeName,
+      builder: (context, state) => ProfessionalProfileCreation(
+        userEmail: state.extra as String,
+      ),
       routes: [],
     ),
     GoRoute(
       name: QuestionnairePermissionScreen.routeName,
       path: QuestionnairePermissionScreen.routeName,
-      builder: (context, state) => const QuestionnairePermissionScreen(),
+      builder: (context, state) => QuestionnairePermissionScreen(
+        userEmail: state.extra as String?,
+      ),
       routes: [
         GoRoute(
           name: InitialQuestionsScreen.routeName,
           path: InitialQuestionsScreen.routeName,
-          builder: (context, state) => const InitialQuestionsScreen(),
+          builder: (context, state) => InitialQuestionsScreen(
+            userEmail: state.extra as String?,
+          ),
           routes: [],
         ),
       ],

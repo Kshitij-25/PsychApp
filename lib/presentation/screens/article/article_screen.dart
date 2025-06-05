@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../data/models/articles.dart';
+import '../../../data/firebase_models/articles.dart';
 import '../webview/web_view_screen.dart';
 
 class ArticleScreen extends HookConsumerWidget {

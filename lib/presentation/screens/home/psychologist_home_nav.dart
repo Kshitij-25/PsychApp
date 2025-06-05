@@ -5,13 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../notifiers/auth_notifier.dart';
 import '../appointment/psychologists_appointment_screen.dart';
 import '../chat/psychologist_inbox.dart';
 import '../community/community_home.dart';
 import '../community/community_post_screen.dart';
 import '../profile/psychologist_profile_panel.dart';
-import '../welcome/landing_screen.dart';
 
 class PsychologistHomeNav extends HookConsumerWidget {
   static const routeName = '/psychologistHomeNav';
@@ -22,7 +20,7 @@ class PsychologistHomeNav extends HookConsumerWidget {
     final currentIndex = useState(0);
     final _pageController = usePageController(initialPage: currentIndex.value);
 
-    final authNotifier = ref.watch(authStateNotifierProvider.notifier);
+    // final authNotifier = ref.watch(authStateNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +61,11 @@ class PsychologistHomeNav extends HookConsumerWidget {
         actions: [
           if (currentIndex.value == 3)
             TextButton(
-              onPressed: () => _handleLogout(context, ref, authNotifier),
+              onPressed: () => _handleLogout(
+                context,
+                ref,
+                // authNotifier,
+              ),
               child: Text('Logout'),
             ),
         ],
@@ -137,7 +139,7 @@ class PsychologistHomeNav extends HookConsumerWidget {
   void _handleLogout(
     BuildContext context,
     WidgetRef ref,
-    AuthStateNotifier authNotifier,
+    // AuthStateNotifier authNotifier,
   ) async {
     // Show confirmation dialog before signing out
     final shouldSignOut = await showDialog<bool>(
@@ -158,21 +160,21 @@ class PsychologistHomeNav extends HookConsumerWidget {
       ),
     );
 
-    if (shouldSignOut == true) {
-      // Sign out and wait for the user state to update
-      await authNotifier.signOut();
+    // if (shouldSignOut == true) {
+    //   // Sign out and wait for the user state to update
+    //   await authNotifier.signOut();
 
-      ref.invalidate(authStateNotifierProvider);
+    //   ref.invalidate(authStateNotifierProvider);
 
-      // Redirect to the landing screen only after user is null
-      ref.listenManual(
-        authStateNotifierProvider,
-        (previous, next) {
-          if (next.user == null) {
-            context.pushReplacementNamed(LandingScreen.routeName);
-          }
-        },
-      );
-    }
+    //   // Redirect to the landing screen only after user is null
+    //   ref.listenManual(
+    //     authStateNotifierProvider,
+    //     (previous, next) {
+    //       if (next.user == null) {
+    //         context.pushReplacementNamed(LandingScreen.routeName);
+    //       }
+    //     },
+    //   );
+    // }
   }
 }

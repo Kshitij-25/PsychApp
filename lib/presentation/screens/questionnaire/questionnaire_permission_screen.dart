@@ -5,12 +5,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../shared/constants/assets.dart';
 import '../../widgets/custom_elevated_button.dart';
-import '../home/home_navigator.dart';
+import '../welcome/landing_screen.dart';
 import 'initial_questions_screen.dart';
 
 class QuestionnairePermissionScreen extends HookConsumerWidget {
   static const routeName = '/questionnairePermissionScreen';
-  const QuestionnairePermissionScreen({super.key});
+  const QuestionnairePermissionScreen({
+    super.key,
+    this.userEmail,
+  });
+
+  final String? userEmail;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +68,10 @@ class QuestionnairePermissionScreen extends HookConsumerWidget {
           child: CustomElevatedButton(
             buttonLabel: 'Fill out',
             onPressed: () {
-              context.pushNamed(InitialQuestionsScreen.routeName);
+              context.pushNamed(
+                InitialQuestionsScreen.routeName,
+                extra: userEmail,
+              );
             },
             buttonStyle: ElevatedButton.styleFrom(
               enableFeedback: true,
@@ -80,7 +88,7 @@ class QuestionnairePermissionScreen extends HookConsumerWidget {
           child: CustomElevatedButton(
             buttonLabel: 'Later',
             onPressed: () {
-              context.go(HomeNavigator.routeName);
+              context.go(LandingScreen.routeName);
             },
             buttonStyle: ElevatedButton.styleFrom(
               enableFeedback: true,

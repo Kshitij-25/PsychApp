@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/models/comment_model.dart';
-import '../../../data/models/psychologist_model.dart';
-import '../../../data/models/user_model.dart';
+import '../../../data/firebase_models/comment_model.dart';
+import '../../../data/firebase_models/psychologist_model.dart';
+import '../../../data/firebase_models/user_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
 import '../../notifiers/post_interaction_notifier.dart';
 import '../../notifiers/post_notifier.dart';

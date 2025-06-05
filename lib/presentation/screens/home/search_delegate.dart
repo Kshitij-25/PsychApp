@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../data/models/psychologist_model.dart';
+import '../../../data/firebase_models/psychologist_model.dart';
 import '../profile/therapist_profile_screen.dart';
 import '../search/widgets/psychologists_card.dart';
 

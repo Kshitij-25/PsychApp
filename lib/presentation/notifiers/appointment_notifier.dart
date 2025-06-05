@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/appointment_model.dart';
+import '../../data/firebase_models/appointment_model.dart';
 
 final appointmentProvider = StateNotifierProvider<AppointmentNotifier, AsyncValue<List<AppointmentModel>>>((ref) {
   return AppointmentNotifier();

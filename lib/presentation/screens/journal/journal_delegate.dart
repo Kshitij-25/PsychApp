@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:psych_app/data/models/journal_entry.dart';
+import 'package:psych_app/data/firebase_models/journal_entry.dart';
 
 import '../../notifiers/journal_notifier.dart';
 import 'widget/journal_card.dart';

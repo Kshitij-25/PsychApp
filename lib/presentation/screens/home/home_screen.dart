@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/local_data_source/psychologists_type.dart';
+import '../../../data/local_data_source/expertise_data.dart';
 import '../../../data/remote_data_source/health_care_api.dart';
 import '../article/article_screen.dart';
 

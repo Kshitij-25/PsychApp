@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../notifiers/auth_notifier.dart';
 import '../../widgets/custom_elevated_button.dart';
 
 class ForgotPasswordScreen extends HookConsumerWidget {
@@ -16,44 +14,44 @@ class ForgotPasswordScreen extends HookConsumerWidget {
 
     final formKey = GlobalKey<FormState>();
 
-    final authNotifier = ref.watch(authStateNotifierProvider.notifier);
-    final authState = ref.watch(authStateNotifierProvider);
+    // final authNotifier = ref.watch(authStateNotifierProvider.notifier);
+    // final authState = ref.watch(authStateNotifierProvider);
 
     void handleForgetPassword() async {
       if (formKey.currentState!.validate()) {
-        try {
-          await authNotifier.resetPassword(email: emailController.text);
+        // try {
+        //   await authNotifier.resetPassword(email: emailController.text);
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text(
-                'Please check your email to reset password',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onTertiaryContainer,
-                    ),
-              ),
-              backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-            ),
-          );
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       behavior: SnackBarBehavior.floating,
+        //       content: Text(
+        //         'Please check your email to reset password',
+        //         textAlign: TextAlign.center,
+        //         style: Theme.of(context).textTheme.bodySmall?.copyWith(
+        //               color: Theme.of(context).colorScheme.onTertiaryContainer,
+        //             ),
+        //       ),
+        //       backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+        //     ),
+        //   );
 
-          context.pop();
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text(
-                e.toString().replaceFirst("Exception: ", ""),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onError,
-                    ),
-              ),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        }
+        //   context.pop();
+        // } catch (e) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       behavior: SnackBarBehavior.floating,
+        //       content: Text(
+        //         e.toString().replaceFirst("Exception: ", ""),
+        //         textAlign: TextAlign.center,
+        //         style: Theme.of(context).textTheme.bodySmall?.copyWith(
+        //               color: Theme.of(context).colorScheme.onError,
+        //             ),
+        //       ),
+        //       backgroundColor: Theme.of(context).colorScheme.error,
+        //     ),
+        //   );
+        // }
       }
     }
 
@@ -98,16 +96,16 @@ class ForgotPasswordScreen extends HookConsumerWidget {
             ),
           ),
         ),
-        if (authState.isLoading)
-          Container(
-            color: Colors.black87,
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-            ),
-          ),
+        // if (authState.isLoading)
+        //   Container(
+        //     color: Colors.black87,
+        //     child: Center(
+        //       child: CircularProgressIndicator(
+        //         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        //         color: Theme.of(context).colorScheme.onPrimaryContainer,
+        //       ),
+        //     ),
+        //   ),
       ],
     );
   }

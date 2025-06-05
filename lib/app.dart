@@ -29,6 +29,7 @@ class MainApp extends StatelessWidget {
       darkTheme: theme.dark(),
       theme: theme.light(),
       routerConfig: AppRouter.router,
+      // home: UserProfileCreation(),
       builder: (context, child) => InternetWrapper(child: child!),
     );
   }

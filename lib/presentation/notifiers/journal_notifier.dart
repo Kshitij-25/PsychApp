@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/journal_entry.dart';
+import '../../data/firebase_models/journal_entry.dart';
 import '../../shared/constants/firebase_helper.dart';
 
 final journalProvider = StateNotifierProvider<JournalNotifier, List<JournalEntry>>((ref) {

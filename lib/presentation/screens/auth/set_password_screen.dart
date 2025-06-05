@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:psych_app/presentation/screens/profile_creation/profile_creation_questions.dart';
+import 'package:psych_app/presentation/screens/profile_creation/user_profile_creation.dart';
 
 import '../../widgets/custom_elevated_button.dart';
 import '../questionnaire/questionnaire_permission_screen.dart';
@@ -46,7 +46,7 @@ class SetPasswordScreen extends HookConsumerWidget {
                 if (isResetPassword != null && isResetPassword == true) {
                   Navigator.popUntil(context, ModalRoute.withName(LoginScreen.routeName));
                 } else if (isPsychologistMode) {
-                  context.pushNamed(ProfileCreationQuestions.routeName);
+                  context.pushNamed(UserProfileCreation.routeName);
                 } else
                   context.pushNamed(QuestionnairePermissionScreen.routeName);
               },

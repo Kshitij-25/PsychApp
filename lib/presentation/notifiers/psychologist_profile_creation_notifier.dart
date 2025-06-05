@@ -2,50 +2,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/psychologist_model.dart';
+import '../../data/models/professional_profile_data/professional_profile_model.dart';
 
-class PsychologistProfileCreationNotifier extends StateNotifier<PsychologistModel> {
-  PsychologistProfileCreationNotifier()
-      : super(PsychologistModel(
-          fullName: '',
-          specialization: '',
-          qualification: '',
-          about: '',
-          publications: [],
-          publicationsLinks: [],
-          avatarData: '',
-          availability: {
-            'monday': '',
-            'tuesday': '',
-            'wednesday': '',
-            'thursday': '',
-            'friday': '',
-            'saturday': '',
-            'sunday': '',
-          },
-          expertise: [],
-          relationships: [],
-          workStudy: [],
-          happeningsInLife: [],
-          therapistGender: '',
-          sessionTime: '',
-          ratings: 0,
-          reviews: 0,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          role: 'psychologist',
-          dateOfBirth: null,
-          avatarPath: '',
-          avatarUrl: '',
-          email: '',
-          phoneNumber: '',
-        ));
+class PsychologistProfileCreationNotifier extends StateNotifier<ProfessionalProfileModel> {
+  PsychologistProfileCreationNotifier() : super(ProfessionalProfileModel());
 
-  void updateField(PsychologistModel psychologistProfile) {
-    state = psychologistProfile;
+  void updateField(ProfessionalProfileModel professionalProfile) {
+    state = professionalProfile;
   }
 
   Future<String?> processImage(String filePath) async {
@@ -72,43 +37,44 @@ class PsychologistProfileCreationNotifier extends StateNotifier<PsychologistMode
   }
 
   Future<bool> submitProfile(String userId) async {
-    try {
-      var updatedState = state.copyWith(updatedAt: DateTime.now());
+    // try {
+    //   var updatedState = state.copyWith(updatedAt: DateTime.now());
 
-      // Process image if exists
-      if (updatedState.avatarPath!.isNotEmpty) {
-        try {
-          final base64Image = await processImage(updatedState.avatarPath!);
-          if (base64Image != null) {
-            updatedState = updatedState.copyWith(avatarData: base64Image);
-          }
-        } catch (e) {
-          print('Image processing failed: $e');
-          // Continue with profile creation even if image processing fails
-        }
-      }
+    //   // Process image if exists
+    //   if (updatedState.avatarPath!.isNotEmpty) {
+    //     try {
+    //       final base64Image = await processImage(updatedState.avatarPath!);
+    //       if (base64Image != null) {
+    //         updatedState = updatedState.copyWith(avatarData: base64Image);
+    //       }
+    //     } catch (e) {
+    //       print('Image processing failed: $e');
+    //       // Continue with profile creation even if image processing fails
+    //     }
+    //   }
 
-      // Prepare data for Firestore
-      final dataToSave = updatedState.toJson();
+    //   // Prepare data for Firestore
+    //   final dataToSave = updatedState.toJson();
 
-      if (dataToSave.toString().length > 900000) {
-        // Leave room for metadata
-        throw Exception('Profile data too large');
-      }
+    //   if (dataToSave.toString().length > 900000) {
+    //     // Leave room for metadata
+    //     throw Exception('Profile data too large');
+    //   }
 
-      dataToSave.remove('avatarPath');
+    //   dataToSave.remove('avatarPath');
 
-      // Save to Firestore
-      await FirebaseFirestore.instance.collection('psychologist').doc(userId).set(dataToSave, SetOptions(merge: true));
+    //   // Save to Firestore
+    //   await FirebaseFirestore.instance.collection('psychologist').doc(userId).set(dataToSave, SetOptions(merge: true));
 
-      return true;
-    } catch (e) {
-      print('Error submitting profile: $e');
-      return false;
-    }
+    //   return true;
+    // } catch (e) {
+    //   print('Error submitting profile: $e');
+    //   return false;
+    // }
+    return false; // Ensure a boolean is always returned
   }
 }
 
-final psychologistProfileFormProvider = StateNotifierProvider<PsychologistProfileCreationNotifier, PsychologistModel>(
+final psychologistProfileFormProvider = StateNotifierProvider<PsychologistProfileCreationNotifier, ProfessionalProfileModel>(
   (ref) => PsychologistProfileCreationNotifier(),
 );

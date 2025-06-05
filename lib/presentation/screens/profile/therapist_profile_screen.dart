@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:psych_app/presentation/widgets/custom_elevated_button.dart';
 
-import '../../../data/models/psychologist_model.dart';
+import '../../../data/firebase_models/psychologist_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
 import '../../notifiers/chat_notifier.dart';
 import '../appointment/book_appointment_screen.dart';

@@ -1,87 +1,43 @@
-// State notifier to handle form data
-import 'dart:convert';
-import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../data/models/professional_profile_data/professional_profile_model.dart';
+import '../../data/models/user_profile_data/user_profile_model.dart';
+import '../../data/repository/create_profile_repository.dart';
+import '../providers/profile_creation_providers.dart';
 
-import '../../data/models/user_model.dart';
+class UserProfileFormNotifier extends StateNotifier<UserProfileModel> {
+  final CreateProfileRepository _repository;
 
-class UserProfileFormNotifier extends StateNotifier<UserModel> {
-  UserProfileFormNotifier()
-      : super(UserModel(
-          email: '',
-          fullName: '',
-          gender: '',
-          phoneNumber: '',
-          avatarData: '',
-          avatarPath: '',
-          avatarUrl: '',
-          role: 'user',
-          dateOfBirth: null,
-          emergencyContact: '',
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-        ));
+  UserProfileFormNotifier(this._repository) : super(UserProfileModel());
 
-  void updateField(UserModel userModel) {
-    state = userModel;
+  void updateField(UserProfileModel updatedProfile) {
+    state = updatedProfile;
   }
 
-  Future<String?> processImage(String filePath) async {
+  Future<bool> submitProfile() async {
     try {
-      final file = File(filePath);
+      final response = await _repository.createUserProfile(
+        fullName: state.fullName,
+        email: state.email,
+        profilePicUrl: state.profilePicUrl,
+        dateOfBirth: state.dateOfBirth,
+        genderIdentity: state.genderIdentity,
+        preferredPronouns: state.preferredPronouns,
+        phoneNumber: state.phoneNumber,
+        location: state.location,
+        preferredLanguage: state.therapyPreferences?.preferredLanguage,
+        therapyMode: state.therapyPreferences?.therapyMode,
+        professionalType: state.therapyPreferences?.professionalType,
+        preferredProfessionalGender: state.therapyPreferences?.preferredProfessionalGender,
+        emergencyName: state.emergencyContact?.emergencyName,
+        emergencyRelationship: state.emergencyContact?.emergencyRelationship,
+        emergencyPhone: state.emergencyContact?.emergencyPhone,
+      );
 
-      // Read file as bytes
-      List<int> imageBytes = await file.readAsBytes();
-
-      // Convert to base64
-      String base64Image = base64Encode(imageBytes);
-
-      // Check size (1MB limit for Firestore documents)
-      if (base64Image.length > 700000) {
-        // Leaving some room for other fields
-        throw Exception('Image size too large. Please choose a smaller image.');
+      if (response != null) {
+        return true;
       }
-
-      return base64Image;
-    } catch (e) {
-      print('Error processing image: $e');
-      rethrow;
-    }
-  }
-
-  Future<bool> submitProfile(String userId) async {
-    try {
-      state = state.copyWith(updatedAt: DateTime.now());
-
-      // Process image if exists
-      if (state.avatarPath!.isNotEmpty) {
-        try {
-          final base64Image = await processImage(state.avatarPath!);
-          if (base64Image != null) {
-            state = state.copyWith(avatarData: base64Image);
-          }
-        } catch (e) {
-          print('Image processing failed: $e');
-          // Continue with profile creation even if image processing fails
-        }
-      }
-
-      // Prepare data for Firestore
-      final dataToSave = state.toJson();
-
-      if (dataToSave.toString().length > 900000) {
-        // Leave room for metadata
-        throw Exception('Profile data too large');
-      }
-
-      dataToSave.remove('avatarPath');
-
-      // Save to Firestore
-      await FirebaseFirestore.instance.collection('users').doc(userId).set(dataToSave, SetOptions(merge: true));
-
-      return true;
+      return false;
     } catch (e) {
       print('Error submitting profile: $e');
       return false;
@@ -89,6 +45,50 @@ class UserProfileFormNotifier extends StateNotifier<UserModel> {
   }
 }
 
-final userProfileFormProvider = StateNotifierProvider<UserProfileFormNotifier, UserModel>(
-  (ref) => UserProfileFormNotifier(),
+// ✅ Provider for User Profile
+final userProfileFormProvider = StateNotifierProvider<UserProfileFormNotifier, UserProfileModel>(
+  (ref) => UserProfileFormNotifier(ref.watch(createProfileRepositoryProvider)),
+);
+
+class ProfessionalProfileFormNotifier extends StateNotifier<ProfessionalProfileModel> {
+  final CreateProfileRepository _repository;
+
+  ProfessionalProfileFormNotifier(this._repository) : super(ProfessionalProfileModel());
+
+  void updateField(ProfessionalProfileModel updatedProfile) {
+    state = updatedProfile;
+  }
+
+  Future<bool> submitProfile() async {
+    try {
+      final response = await _repository.createProfessionalProfile(
+        fullName: state.fullName,
+        dateOfBirth: state.dateOfBirth,
+        genderIdentity: state.genderIdentity,
+        preferredPronouns: state.preferredPronouns,
+        contactNumber: state.contactNumber,
+        email: state.email,
+        address: state.address,
+        credentials: state.credentials,
+        educationHistory: state.educationHistory,
+        experience: state.experience,
+        therapeuticModalities: state.therapeuticModalities,
+        therapyDescription: state.therapyDescription,
+        availability: state.availability,
+        paymentInfo: state.paymentInfo,
+        backgroundCheckConsent: state.backgroundCheckConsent,
+        termsAccepted: state.termsAccepted,
+      );
+
+      return response != null;
+    } catch (e) {
+      print('Error submitting professional profile: $e');
+      return false;
+    }
+  }
+}
+
+// ✅ Provider for Professional Profile
+final professionalProfileFormProvider = StateNotifierProvider<ProfessionalProfileFormNotifier, ProfessionalProfileModel>(
+  (ref) => ProfessionalProfileFormNotifier(ref.watch(createProfileRepositoryProvider)),
 );

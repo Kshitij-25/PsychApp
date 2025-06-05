@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../data/models/psychologist_model.dart';
+import '../../../data/firebase_models/psychologist_model.dart';
 import '../../../shared/constants/firebase_helper.dart';
 import '../../notifiers/appointment_notifier.dart';
 import '../../widgets/custom_elevated_button.dart';

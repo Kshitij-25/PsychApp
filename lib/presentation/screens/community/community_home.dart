@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/models/post_model.dart';
-import '../../../data/models/psychologist_model.dart';
+import '../../../data/firebase_models/post_model.dart';
+import '../../../data/firebase_models/psychologist_model.dart';
 import '../../../data/remote_data_source/firebase_auth.dart';
 import '../../notifiers/post_interaction_notifier.dart';
 import '../../notifiers/post_notifier.dart';

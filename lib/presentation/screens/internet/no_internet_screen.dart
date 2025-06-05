@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../services/netwok/network_helper.dart';
@@ -61,7 +62,7 @@ class NoInternetScreen extends StatelessWidget {
                   ),
                   onPressed: () async {
                     if (await NetworkHelper.hasInternet()) {
-                      Navigator.pop(context);
+                      context.pop();
                     }
                   },
                   child: Text(

@@ -92,7 +92,7 @@ class LocalNotificationService {
       'How are you feeling today? Tap to track your mood!',
       scheduledTime, // Scheduled time (1 minute from now)
       platformDetails,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      // uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       androidScheduleMode: AndroidScheduleMode.exact,
     );
@@ -128,7 +128,7 @@ class LocalNotificationService {
       _nextInstanceOfSpecificTime(hour, minute), // Scheduled time
       platformDetails,
       // androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      // uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       androidScheduleMode: AndroidScheduleMode.exact,
     );
@@ -179,7 +179,7 @@ class LocalNotificationService {
       'Take a moment to reflect. Write in your journal today!',
       _nextInstanceOfSpecificTime(hour, minute),
       platformDetails,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      // uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       androidScheduleMode: AndroidScheduleMode.exact,
     );

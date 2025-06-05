@@ -4,10 +4,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../shared/constants/firebase_helper.dart';
-import '../../notifiers/auth_notifier.dart';
 import '../../notifiers/icon_state_notifier.dart';
+import '../../providers/auth_providers.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../home/home_navigator.dart';
 import '../home/psychologist_home_nav.dart';
@@ -25,30 +25,33 @@ class LoginScreen extends HookConsumerWidget {
 
     final formKey = GlobalKey<FormState>();
 
-    final authNotifier = ref.watch(authStateNotifierProvider.notifier);
-    final authState = ref.watch(authStateNotifierProvider);
+    final authNotifier = ref.watch(authNotifierProvider.notifier);
+    final authState = ref.watch(authNotifierProvider);
 
     void handleSignIn() async {
       if (formKey.currentState!.validate()) {
         try {
-          await authNotifier.signInWithEmail(
+          final prefs = await SharedPreferences.getInstance();
+
+          final user = await authNotifier.login(
             emailController.text.toLowerCase().trim(),
             passwordController.text.trim(),
           );
 
-          await Future.microtask(() async {
-            if (authState.user != null) {
-              String userRole = await FirebaseHelper.getUserRole(authState.user?.uid);
-              if (userRole == 'user') {
-                context.goNamed(HomeNavigator.routeName);
-              } else {
-                context.goNamed(PsychologistHomeNav.routeName);
-              }
-              emailController.clear();
-              passwordController.clear();
+          // ✅ Only navigate if the user is successfully logged in
+          if (user != null) {
+            final String? userRole = prefs.getString('userRole');
+
+            ref.read(isGuestLoginProvider.notifier).state = false;
+
+            if (userRole == "USER") {
+              context.goNamed(HomeNavigator.routeName);
+            } else {
+              context.goNamed(PsychologistHomeNav.routeName);
             }
-          });
+          }
         } catch (e) {
+          // ✅ Show error in Snackbar
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               behavior: SnackBarBehavior.floating,
