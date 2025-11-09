@@ -19,7 +19,7 @@ import 'shared/routers/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-// Wrap Firebase initialization in try-catch for better error handling
+  // Wrap Firebase initialization in try-catch for better error handling
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -76,6 +76,8 @@ void main() async {
 class CustomHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

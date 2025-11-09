@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,7 +17,8 @@ class CreateJournalScreen extends StatefulHookConsumerWidget {
   final JournalEntry? existingNote;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CreateJournalScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CreateJournalScreenState();
 }
 
 class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
@@ -43,7 +45,8 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final titleController = useTextEditingController(text: widget.existingNote?.title ?? '');
+    final titleController =
+        useTextEditingController(text: widget.existingNote?.title ?? '');
 
     // final quillController = useMemoized(() => widget.existingNote != null
     //     ? QuillController(
@@ -65,7 +68,9 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
             onPressed: () async {
               final plainText = quillController.document.toPlainText().trim();
               final firstSentence = plainText.split('.').first.trim();
-              final subtitle = plainText.split('.').length > 1 ? plainText.split('.').sublist(1).join('.').trim() : '';
+              final subtitle = plainText.split('.').length > 1
+                  ? plainText.split('.').sublist(1).join('.').trim()
+                  : '';
               final now = DateTime.now();
 
               if (plainText.isEmpty) {
@@ -92,93 +97,95 @@ class _CreateJournalScreenState extends ConsumerState<CreateJournalScreen> {
                 if (widget.existingNote == null) {
                   await ref.read(journalProvider.notifier).addJournal(journal);
                 } else {
-                  await ref.read(journalProvider.notifier).updateJournal(journal.id!, journal);
+                  await ref
+                      .read(journalProvider.notifier)
+                      .updateJournal(journal.id!, journal);
                 }
 
                 if (mounted) context.pop();
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to save journal: ${e.toString()}')),
+                  SnackBar(
+                      content: Text('Failed to save journal: ${e.toString()}')),
                 );
               }
             },
           ),
         ],
         centerTitle: true,
-        // title: // Quill Toolbar
-        //     QuillToolbar.simple(
-        //   controller: quillController,
-        //   configurations: QuillSimpleToolbarConfigurations(
-        //     showAlignmentButtons: false,
-        //     showListBullets: false,
-        //     showColorButton: false,
-        //     showBackgroundColorButton: false,
-        //     showBoldButton: false,
-        //     showCenterAlignment: false,
-        //     showClearFormat: false,
-        //     showClipboardCopy: false,
-        //     showClipboardCut: false,
-        //     showClipboardPaste: false,
-        //     showCodeBlock: false,
-        //     showDirection: false,
-        //     showDividers: false,
-        //     showFontFamily: false,
-        //     showFontSize: false,
-        //     showHeaderStyle: false,
-        //     showIndent: false,
-        //     showInlineCode: false,
-        //     showItalicButton: false,
-        //     showJustifyAlignment: false,
-        //     showLeftAlignment: false,
-        //     showLineHeightButton: false,
-        //     showLink: false,
-        //     showListCheck: false,
-        //     showListNumbers: false,
-        //     showQuote: false,
-        //     showRightAlignment: false,
-        //     showSearchButton: false,
-        //     showSmallButton: false,
-        //     showStrikeThrough: false,
-        //     showSubscript: false,
-        //     showSuperscript: false,
-        //     showUnderLineButton: false,
-        //     multiRowsDisplay: false,
-        //   ),
-        // ),
+        title: QuillSimpleToolbar(
+          controller: quillController,
+          config: QuillSimpleToolbarConfig(
+            showBoldButton: true,
+            showItalicButton: true,
+            multiRowsDisplay: false,
+            showAlignmentButtons: false,
+            showListBullets: false,
+            showBackgroundColorButton: false,
+            showColorButton: false,
+            showCenterAlignment: false,
+            showClearFormat: false,
+            showClipboardCopy: false,
+            showClipboardCut: false,
+            showClipboardPaste: false,
+            showCodeBlock: false,
+            showDirection: false,
+            showDividers: false,
+            showFontFamily: false,
+            showFontSize: false,
+            showHeaderStyle: false,
+            showIndent: false,
+            showInlineCode: false,
+            showJustifyAlignment: false,
+            showLeftAlignment: false,
+            showLineHeightButton: false,
+            showLink: false,
+            showListCheck: false,
+            showListNumbers: false,
+            showQuote: false,
+            showRightAlignment: false,
+            showSearchButton: false,
+            showSmallButton: false,
+            showStrikeThrough: false,
+            showSubscript: false,
+            showSuperscript: false,
+            showUnderLineButton: false,
+          ),
+        ),
       ),
       body: Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          //   child: TextField(
-          //     controller: titleController,
-          //     decoration: InputDecoration(
-          //       hintText: 'Title',
-          //       border: InputBorder.none,
-          //     ),
-          //     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                hintText: 'Title',
+                border: InputBorder.none,
+              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
 
-          // // Quill Editor
-          // Expanded(
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          //     child: QuillEditor(
-          //       controller: quillController,
-          //       focusNode: FocusNode(),
-          //       scrollController: ScrollController(),
-          //       configurations: QuillEditorConfigurations(
-          //         onTapOutside: (event, focusNode) {
-          //           focusNode.unfocus();
-          //         },
-          //         scrollable: true,
-          //         disableClipboard: true,
-          //         placeholder: 'Start writing your thoughts here..',
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          // Quill Editor
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: QuillEditor(
+                controller: quillController,
+                focusNode: FocusNode(),
+                scrollController: ScrollController(),
+                config: QuillEditorConfig(
+                  onTapOutside: (event, focusNode) {
+                    focusNode.unfocus();
+                  },
+                  scrollable: true,
+                  disableClipboard: true,
+                  placeholder: 'Start writing your thoughts here..',
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

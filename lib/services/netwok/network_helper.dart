@@ -9,11 +9,14 @@ class NetworkHelper {
   static Future<bool> hasInternet() async {
     final connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) return false;
-    return await InternetConnectionChecker.instance.hasConnection;
+    return await InternetConnectionChecker.createInstance().hasConnection;
   }
 
-  static Stream<bool> get internetStatusStream => Connectivity().onConnectivityChanged.asyncMap(
-        (result) async => result != ConnectivityResult.none && await InternetConnectionChecker.instance.hasConnection,
+  static Stream<bool> get internetStatusStream =>
+      Connectivity().onConnectivityChanged.asyncMap(
+        (result) async =>
+            result != ConnectivityResult.none &&
+            await InternetConnectionChecker.createInstance().hasConnection,
       );
 
   static void initialize() {

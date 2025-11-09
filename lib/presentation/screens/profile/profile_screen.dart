@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/models/user_profile_data/user_profile_model.dart';
 import '../../../shared/constants/hive_helper.dart';
 import '../../providers/auth_providers.dart';
+import '../auth/login_screen.dart';
 import '../chat/inbox_screen.dart';
 import '../mood/mood_navigator.dart';
 import '../notifications/notification_screen.dart';
@@ -45,7 +46,9 @@ class ProfileScreen extends HookConsumerWidget {
         children: [
           SizedBox(height: 32),
           Row(
-            crossAxisAlignment: userProfile.value != null ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            crossAxisAlignment: userProfile.value != null
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: [
               // Profile Picture
               GestureDetector(
@@ -66,13 +69,15 @@ class ProfileScreen extends HookConsumerWidget {
                 },
                 child: CircleAvatar(
                   radius: 40,
-                  child: (userProfile.value?.profilePicUrl == null || userProfile.value?.profilePicUrl == '')
+                  child: (userProfile.value?.profilePicUrl == null ||
+                          userProfile.value?.profilePicUrl == '')
                       ? Icon(
                           CupertinoIcons.person_fill,
                           size: 30,
                         )
                       : null,
-                  backgroundImage: (userProfile.value?.profilePicUrl != null && userProfile.value?.profilePicUrl != '')
+                  backgroundImage: (userProfile.value?.profilePicUrl != null &&
+                          userProfile.value?.profilePicUrl != '')
                       ? CachedNetworkImageProvider(
                           userProfile.value!.profilePicUrl!,
                           cacheKey: userProfile.value!.profilePicUrl,
@@ -82,7 +87,8 @@ class ProfileScreen extends HookConsumerWidget {
               ),
               SizedBox(width: 20),
               // User Info Column with Responsive Text
-              if (userProfile.value?.fullName != null && userProfile.value?.fullName != '')
+              if (userProfile.value?.fullName != null &&
+                  userProfile.value?.fullName != '')
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +98,10 @@ class ProfileScreen extends HookConsumerWidget {
                         child: Text(
                           userProfile.value?.fullName ?? '',
                           textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
@@ -102,16 +111,18 @@ class ProfileScreen extends HookConsumerWidget {
                         child: Text(
                           userProfile.value?.email ?? '',
                           textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Theme.of(context).hintColor,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).hintColor,
+                                  ),
                         ),
                       ),
                     ],
                   ),
                 ),
               // Guest Info Column with Responsive Text
-              if (userProfile.value?.fullName == null || userProfile.value?.fullName == '')
+              if (userProfile.value?.fullName == null ||
+                  userProfile.value?.fullName == '')
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +131,10 @@ class ProfileScreen extends HookConsumerWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           'Guest User',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
@@ -130,17 +144,21 @@ class ProfileScreen extends HookConsumerWidget {
                         child: Text(
                           'Join us! Sign in to enjoy all features\nand a tailored experience.',
                           textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Theme.of(context).hintColor,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).hintColor,
+                                  ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              if (userProfile.value?.fullName != null && userProfile.value?.fullName != '') Spacer(),
+              if (userProfile.value?.fullName != null &&
+                  userProfile.value?.fullName != '')
+                Spacer(),
               // Edit Profile Button
-              if (userProfile.value?.fullName != null && userProfile.value?.fullName != '')
+              if (userProfile.value?.fullName != null &&
+                  userProfile.value?.fullName != '')
                 IconButton(
                   onPressed: () {},
                   icon: Icon(
@@ -179,59 +197,75 @@ class ProfileScreen extends HookConsumerWidget {
                   if (userProfile.value != null) Divider(thickness: 0.5),
                   if (userProfile.value != null)
                     ListTile(
-                      onTap: () => context.pushNamed(NotificationScreen.routeName),
+                      onTap: () =>
+                          context.pushNamed(NotificationScreen.routeName),
                       leading: Icon(CupertinoIcons.bell_fill),
                       title: Text('Notifications'),
                       trailing: Icon(CupertinoIcons.chevron_forward),
                     ),
                   if (userProfile.value != null) Divider(thickness: 0.5),
-                  ListTile(
-                    onTap: () => context.pushNamed(SupportScreen.routeName),
-                    leading: Icon(CupertinoIcons.gear_solid),
-                    title: Text('Support'),
-                    trailing: Icon(CupertinoIcons.chevron_forward),
-                  ),
-                  Divider(thickness: 0.5),
-                  ListTile(
-                    leading: RotatedBox(
-                      quarterTurns: -1,
-                      child: Icon(
-                        CupertinoIcons.share,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
+                  if (userProfile.value != null)
+                    ListTile(
+                      onTap: () => context.pushNamed(SupportScreen.routeName),
+                      leading: Icon(CupertinoIcons.gear_solid),
+                      title: Text('Support'),
+                      trailing: Icon(CupertinoIcons.chevron_forward),
                     ),
-                    title: Text('Sign out'),
-                    trailing: Icon(CupertinoIcons.chevron_forward),
-                    onTap: () async {
-                      // Show confirmation dialog before signing out
-                      final shouldSignOut = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => AlertDialog.adaptive(
-                          title: Text('Sign Out'),
-                          content: Text('Are you sure you want to sign out?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => context.pop(false),
-                              child: Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () => context.pop(true),
-                              child: Text('Sign Out'),
-                            ),
-                          ],
+                  if (userProfile.value != null) Divider(thickness: 0.5),
+                  if (userProfile.value != null)
+                    ListTile(
+                      leading: RotatedBox(
+                        quarterTurns: -1,
+                        child: Icon(
+                          CupertinoIcons.share,
+                          color: Theme.of(context).colorScheme.error,
                         ),
-                      );
+                      ),
+                      title: Text('Sign out'),
+                      trailing: Icon(CupertinoIcons.chevron_forward),
+                      onTap: () async {
+                        // Show confirmation dialog before signing out
+                        final shouldSignOut = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog.adaptive(
+                            title: Text('Sign Out'),
+                            content: Text('Are you sure you want to sign out?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => context.pop(false),
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () => context.pop(true),
+                                child: Text('Sign Out'),
+                              ),
+                            ],
+                          ),
+                        );
 
-                      if (shouldSignOut == true) {
-                        // Sign out and wait for the user state to update
-                        final response = await authNotifier.logoutUser();
+                        if (shouldSignOut == true) {
+                          // Sign out and wait for the user state to update
+                          final response = await authNotifier.logoutUser();
 
-                        if (response == true) {
-                          context.pushReplacementNamed(LandingScreen.routeName);
+                          if (response == true) {
+                            context
+                                .pushReplacementNamed(LandingScreen.routeName);
+                          }
                         }
-                      }
-                    },
-                  ),
+                      },
+                    ),
+                  if (userProfile.value == null)
+                    ListTile(
+                      leading: Icon(
+                        CupertinoIcons.lock,
+                        // color: Theme.of(context).colorScheme.error,
+                      ),
+                      title: Text('Login Now'),
+                      trailing: Icon(CupertinoIcons.chevron_forward),
+                      onTap: () {
+                        context.replaceNamed(LoginScreen.routeName);
+                      },
+                    ),
                 ],
               ),
             ),

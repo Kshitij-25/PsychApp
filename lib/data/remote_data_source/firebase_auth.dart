@@ -11,7 +11,7 @@ final authStateProvider = StreamProvider<User?>((ref) {
 
 // Auth service provider
 final authServiceProvider = Provider<AuthService>((ref) {
-  return AuthService(FirebaseAuth.instance, GoogleSignIn());
+  return AuthService(FirebaseAuth.instance, GoogleSignIn.instance);
 });
 
 class AuthService {
@@ -27,23 +27,27 @@ class AuthService {
     required String role,
   }) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       if (role == 'user') {
-        FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
-          'email': email,
-          'role': role,
-          'uid': userCredential.user?.uid,
-        });
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user?.uid)
+            .set({
+              'email': email,
+              'role': role,
+              'uid': userCredential.user?.uid,
+            });
       } else {
-        FirebaseFirestore.instance.collection('psychologist').doc(userCredential.user?.uid).set({
-          'email': email,
-          'role': role,
-          'uid': userCredential.user?.uid,
-        });
+        FirebaseFirestore.instance
+            .collection('psychologist')
+            .doc(userCredential.user?.uid)
+            .set({
+              'email': email,
+              'role': role,
+              'uid': userCredential.user?.uid,
+            });
       }
 
       return userCredential;
@@ -70,13 +74,15 @@ class AuthService {
   // Google Sign In
   Future<UserCredential> signInWithGoogle({required String role}) async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
       if (googleUser == null) throw 'Google sign in aborted';
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
+        accessToken: googleAuth.idToken,
         idToken: googleAuth.idToken,
       );
 

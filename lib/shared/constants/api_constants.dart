@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
-
 class ApiConstants {
   ApiConstants._();
 
-  static final baseUrl = !kDebugMode ? 'https://mind-nest-backend.onrender.com/api' : 'http://localhost:8080/api';
+  static final baseUrl =
+      // kDebugMode ?
+      'https://mind-nest-backend.onrender.com/api';
+  // : 'http://localhost:8080/api';
 
   static final loginUrl = '/auth/login';
   static final registerUserUrl = '/auth/signup';

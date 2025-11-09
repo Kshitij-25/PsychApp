@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'presentation/screens/internet/no_internet_screen.dart';
 import 'services/netwok/network_helper.dart';
@@ -24,11 +25,13 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       // theme: brightness == Brightness.light ? theme.light() : theme.dark(),
       debugShowCheckedModeBanner: false,
-      themeMode: brightness == Brightness.light ? ThemeMode.light : ThemeMode.dark,
+      themeMode:
+          brightness == Brightness.light ? ThemeMode.light : ThemeMode.dark,
       // themeMode: ThemeMode.light,
       darkTheme: theme.dark(),
       theme: theme.light(),
       routerConfig: AppRouter.router,
+      localizationsDelegates: FlutterQuillLocalizations.localizationsDelegates,
       // home: UserProfileCreation(),
       builder: (context, child) => InternetWrapper(child: child!),
     );
